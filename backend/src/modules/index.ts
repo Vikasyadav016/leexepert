@@ -1,4 +1,5 @@
 export { AuthSession } from './auth/auth-session.model'
+export { ExecutionLog } from './logs/execution-log.model'
 export { Cart } from './cart/cart.model'
 export { Category } from './categories/category.model'
 export { ContentPage } from './cms/content-page.model'
