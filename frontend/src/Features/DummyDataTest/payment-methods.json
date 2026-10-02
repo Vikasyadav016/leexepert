@@ -1,0 +1,18 @@
+[
+  {
+    "id": "demo-card",
+    "name": "Demo card",
+    "description": "Simulated secure card payment",
+    "type": "test-card",
+    "display": "Test payment · no charge",
+    "isDefault": true
+  },
+  {
+    "id": "pay-on-delivery",
+    "name": "Pay on delivery",
+    "description": "Simulated payment on delivery",
+    "type": "cash-on-delivery",
+    "display": "Pay when your parcel arrives",
+    "isDefault": false
+  }
+]

@@ -1,0 +1,28 @@
+[
+  {
+    "id": "demo-order-2026-001",
+    "orderNumber": "LE-260912-1042",
+    "placedAt": "2026-09-12T10:42:00.000Z",
+    "status": "Delivered",
+    "paymentStatus": "Paid · demo",
+    "subtotal": 206,
+    "shipping": 0,
+    "tax": 16.48,
+    "total": 222.48,
+    "paymentMethod": { "id": "demo-card", "name": "Demo card" },
+    "address": {
+      "firstName": "Alex",
+      "lastName": "Morgan",
+      "addressLine1": "2418 Valencia Street",
+      "addressLine2": "Apartment 4",
+      "city": "San Francisco",
+      "region": "CA",
+      "postalCode": "94110",
+      "country": "United States"
+    },
+    "lines": [
+      { "productId": 1, "name": "The Sunday Shirt", "color": "Poppy", "image": "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?auto=format&fit=crop&w=240&q=75", "unitPrice": 88, "quantity": 1 },
+      { "productId": 3, "name": "Everyday Trouser", "color": "Olive", "image": "https://images.unsplash.com/photo-1506629905607-d9c297d61b93?auto=format&fit=crop&w=240&q=75", "unitPrice": 118, "quantity": 1 }
+    ]
+  }
+]

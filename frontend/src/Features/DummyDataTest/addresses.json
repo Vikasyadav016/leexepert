@@ -1,0 +1,18 @@
+[
+  {
+    "id": "address-home",
+    "label": "Home",
+    "firstName": "Alex",
+    "lastName": "Morgan",
+    "email": "alex.morgan@example.test",
+    "phone": "+1 415 555 0134",
+    "addressLine1": "2418 Valencia Street",
+    "addressLine2": "Apartment 4",
+    "city": "San Francisco",
+    "region": "CA",
+    "postalCode": "94110",
+    "country": "United States",
+    "countryCode": "US",
+    "isDefault": true
+  }
+]

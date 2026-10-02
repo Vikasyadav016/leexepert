@@ -2,7 +2,7 @@ import type { FormEvent } from 'react'
 import type { Page } from '../types'
 
 type CustomerPagesProps = {
-  page: Extract<Page, 'Account' | 'Orders' | 'Returns' | 'Track Order' | 'About Brand' | 'Contact' | 'Policies'>
+  page: Extract<Page, 'Account' | 'Returns' | 'Track Order' | 'About Brand' | 'Contact' | 'Policies'>
   onNotice: (message: string) => void
   onSubmit: (event: FormEvent<HTMLFormElement>, message: string) => void
   onShop: () => void
@@ -10,10 +10,6 @@ type CustomerPagesProps = {
 
 function AccountPage({ onNotice, onSubmit }: Pick<CustomerPagesProps, 'onNotice' | 'onSubmit'>) {
   return <section className="section-block content-page narrow-page"><p className="eyebrow">Welcome back</p><h1>Your account</h1><form className="simple-form" onSubmit={(event) => onSubmit(event, 'Sign-in is not connected yet. Your account service will be available soon.')}><p>Sign in to see your orders, save your favorites and make checkout a little easier.</p><input required type="email" placeholder="Email address" /><input required type="password" placeholder="Password" /><button className="button button-dark full-button">Sign in</button><button type="button" className="text-link" onClick={() => onNotice('Account creation will be available soon.')}>Create an account <span>↗</span></button></form></section>
-}
-
-function OrdersPage({ onShop }: Pick<CustomerPagesProps, 'onShop'>) {
-  return <section className="section-block content-page"><p className="eyebrow">Your purchases</p><h1>Orders</h1><div className="empty-panel"><h2>No orders just yet.</h2><p>Once you place an order, you can follow its progress here.</p><button className="text-link" onClick={onShop}>Find your first favorite <span>↗</span></button></div></section>
 }
 
 function ReturnsPage({ onSubmit }: Pick<CustomerPagesProps, 'onSubmit'>) {
@@ -39,7 +35,6 @@ function PoliciesPage() {
 export function CustomerPages({ page, onNotice, onSubmit, onShop }: CustomerPagesProps) {
   switch (page) {
     case 'Account': return <AccountPage onNotice={onNotice} onSubmit={onSubmit} />
-    case 'Orders': return <OrdersPage onShop={onShop} />
     case 'Returns': return <ReturnsPage onSubmit={onSubmit} />
     case 'Track Order': return <TrackOrderPage onSubmit={onSubmit} />
     case 'About Brand': return <AboutPage onShop={onShop} />
