@@ -140,6 +140,16 @@
 .detail-footnote { margin-top: 25px; padding-top: 17px; border-top: 1px solid var(--line); color: var(--muted); font-size: 10px; line-height: 1.8; }
 
 .content-page { min-height: 52vh; }
+.account-access-page { display: grid; align-items: center; }
+.account-flip { width: min(100%, 480px); margin: 0 auto; perspective: 1400px; }
+.account-flip-inner { position: relative; min-height: 470px; transform-style: preserve-3d; transition: transform .8s cubic-bezier(.2,.7,.2,1); }
+.account-flip.is-signup .account-flip-inner { transform: rotateY(180deg); }
+.account-flip-face { position: absolute; inset: 0; padding: clamp(22px, 5vw, 38px); border: 1px solid var(--line); background: var(--paper); backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.account-flip-signup { transform: rotateY(180deg); }
+.account-face-fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
+.account-face-fieldset:disabled input, .account-face-fieldset:disabled button { opacity: 1; }
+.account-flip-face h1 { margin-bottom: 25px; }
+.account-form { max-width: none; }
 .content-page > .eyebrow { margin-bottom: 14px; }
 .content-page > h1 { margin-bottom: 34px; }
 .narrow-page { max-width: 810px; margin: 0 auto; }
@@ -254,6 +264,7 @@
   .detail-image img { max-height: 560px; }
   .detail-copy { padding: 28px 21px 0; }
   .content-page { min-height: 45vh; }
+  .account-flip-inner { min-height: 490px; }
   .cart-layout, .checkout-layout { grid-template-columns: 1fr; gap: 25px; }
   .cart-line { grid-template-columns: 72px 1fr auto; gap: 11px; }
   .cart-line > img { width: 72px; }

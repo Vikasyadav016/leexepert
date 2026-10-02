@@ -89,5 +89,5 @@ export function OrdersRoute() {
 export function CustomerRoute({ page }: { page: CustomerPageName }) {
   const navigate = useNavigate()
   const store = useStorefront()
-  return <CustomerPages page={page} onNotice={store.notify} onSubmit={(event, message) => { event.preventDefault(); store.notify(message) }} onShop={() => navigate('/shop')} />
+  return <CustomerPages page={page} onSubmit={(event, message) => { event.preventDefault(); store.notify(message) }} onShop={() => navigate('/shop')} />
 }
