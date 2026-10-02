@@ -1,0 +1,12 @@
+{
+  "eyebrow": "A little something is on its way",
+  "title": "Order complete",
+  "subtitle": "Thank you for choosing pieces made to live in.",
+  "orderNumber": "ORDER {orderNumber}",
+  "demoNote": "This was a demo order. No payment was processed.",
+  "itemsHeading": "Your order",
+  "ratePrompt": "How does it feel?",
+  "rated": "Thank you for your rating.",
+  "viewOrders": "View your orders",
+  "continueShopping": "Continue shopping"
+}

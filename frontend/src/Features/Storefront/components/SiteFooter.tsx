@@ -1,5 +1,7 @@
 import type { FormEvent } from 'react'
 import type { Page } from '../types'
+import footerText from '../../../TextJson/Storefront/SiteFooter.json'
+import brandText from '../../../TextJson/Brand.json'
 import './SiteFooter.css'
 
 type SiteFooterProps = {
@@ -11,19 +13,19 @@ export function SiteFooter({ onNavigate, onSubmit }: SiteFooterProps) {
   return (
     <footer className="site-footer">
       <div className="footer-main">
-        <div><button className="wordmark footer-wordmark" onClick={() => onNavigate('Home')}>LEEX<span>®</span></button><p>Natural linen, thoughtfully made.<br />For all the days that make a life.</p></div>
-        <div className="footer-column"><span>Explore</span><button onClick={() => onNavigate('Shop')}>Shop</button><button onClick={() => onNavigate('Collections')}>Collections</button><button onClick={() => onNavigate('About Brand')}>About brand</button></div>
-        <div className="footer-column"><span>Customer care</span><button onClick={() => onNavigate('Contact')}>Contact</button><button onClick={() => onNavigate('Orders')}>Orders</button><button onClick={() => onNavigate('Track Order')}>Track order</button><button onClick={() => onNavigate('Returns')}>Returns</button><button onClick={() => onNavigate('Policies')}>Policies</button></div>
+        <div><button className="wordmark footer-wordmark" onClick={() => onNavigate('Home')}>{brandText.name}<span>®</span></button><p>{footerText.brandLine1}<br />{footerText.brandLine2}</p></div>
+        <div className="footer-column"><span>{footerText.explore}</span><button onClick={() => onNavigate('Shop')}>{footerText.shop}</button><button onClick={() => onNavigate('Collections')}>{footerText.collections}</button><button onClick={() => onNavigate('About Brand')}>{footerText.about}</button></div>
+        <div className="footer-column"><span>{footerText.customerCare}</span><button onClick={() => onNavigate('Contact')}>{footerText.contact}</button><button onClick={() => onNavigate('Orders')}>{footerText.orders}</button><button onClick={() => onNavigate('Track Order')}>{footerText.trackOrder}</button><button onClick={() => onNavigate('Returns')}>{footerText.returns}</button><button onClick={() => onNavigate('Policies')}>{footerText.policies}</button></div>
         <div className="footer-newsletter">
-          <span>Notes from the linen life</span>
-          <form onSubmit={(event) => onSubmit(event, 'You are on the list. See you in your inbox.')}>
-            <input aria-label="Email for newsletter" type="email" required placeholder="Your email address" />
-            <button aria-label="Subscribe">↗</button>
+          <span>{footerText.newsletter}</span>
+          <form onSubmit={(event) => onSubmit(event, footerText.newsletterSuccess)}>
+            <input aria-label={footerText.newsletterEmail} type="email" required placeholder={footerText.newsletterEmail} />
+            <button aria-label={footerText.subscribe}>↗</button>
           </form>
-          <small>Occasional letters, new arrivals and 10% off your first order.</small>
+          <small>{footerText.newsletterNote}</small>
         </div>
       </div>
-      <div className="footer-bottom"><span>© 2026 Leex Studio</span><span>Made with care, worn everywhere.</span><button onClick={() => onNavigate('Policies')}>Privacy &amp; terms</button></div>
+      <div className="footer-bottom"><span>{footerText.copyright}</span><span>{footerText.footerSignoff}</span><button onClick={() => onNavigate('Policies')}>{footerText.privacyTerms}</button></div>
     </footer>
   )
 }

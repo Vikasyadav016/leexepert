@@ -1,0 +1,6 @@
+.product-rating { display: inline-flex; align-items: center; gap: 4px; }
+.rating-star { padding: 2px; border: 0; background: transparent; color: #c9c8bd; font-size: 16px; line-height: 1; cursor: pointer; }
+.rating-star.is-active { color: #a75b43; }
+.rating-star:not(:disabled):hover { color: #a75b43; transform: translateY(-1px); }
+.rating-star:disabled { cursor: default; }
+.rating-value { margin-left: 6px; color: var(--muted); font-size: 9px; }

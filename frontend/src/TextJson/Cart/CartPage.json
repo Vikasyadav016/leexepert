@@ -1,0 +1,16 @@
+{
+  "eyebrow": "Your selection",
+  "title": "Your bag",
+  "emptyTitle": "Your bag is taking a breather.",
+  "shop": "Shop the collection",
+  "removeOne": "Remove one {name}",
+  "addOne": "Add one {name}",
+  "summaryEyebrow": "A little summary",
+  "total": "Order total",
+  "subtotal": "Subtotal",
+  "shipping": "Shipping",
+  "complimentary": "Complimentary",
+  "shippingAtCheckout": "$8.00 at checkout",
+  "checkout": "Continue to checkout",
+  "demoNote": "Demo checkout · no real payment is collected."
+}

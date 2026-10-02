@@ -1,0 +1,9 @@
+{
+  "eyebrow": "On its way?",
+  "title": "Track your order",
+  "intro": "Enter your order details and we'll help you find your parcel.",
+  "notConnected": "Tracking details are not connected yet. Please check your shipping confirmation email.",
+  "orderNumber": "Order number",
+  "email": "Email address",
+  "submit": "Find my order"
+}

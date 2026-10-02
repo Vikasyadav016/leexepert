@@ -1,5 +1,6 @@
 import type { FormEvent } from 'react'
 import type { Address, CartQuantities, Product } from '../Storefront/types'
+import addressText from '../../TextJson/Checkout/AddressPage.json'
 import './Checkout.css'
 
 type CheckoutDetails = { email: string; address: Address }
@@ -35,18 +36,18 @@ export function AddressPage({ initialDetails, products, quantities, subtotal, on
 
   return (
     <section className="section-block content-page checkout-page">
-      <p className="eyebrow">The last little steps</p><h1>Delivery address</h1>
-      <div className="checkout-progress" aria-label="Checkout progress"><span className="complete">01 <b>Bag</b></span><i /><span className="current">02 <b>Delivery</b></span><i /><span>03 <b>Payment</b></span></div>
+      <p className="eyebrow">{addressText.eyebrow}</p><h1>{addressText.title}</h1>
+      <div className="checkout-progress" aria-label="Checkout progress"><span className="complete">01 <b>{addressText.bag}</b></span><i /><span className="current">02 <b>{addressText.delivery}</b></span><i /><span>03 <b>{addressText.payment}</b></span></div>
       <div className="checkout-layout">
         <form className="checkout-form" onSubmit={submitAddress}>
-          <section className="checkout-section"><div className="checkout-section-heading"><span>01</span><h2>Contact</h2></div><input name="email" type="email" defaultValue={initialDetails.email} required placeholder="Email address" autoComplete="email" /></section>
-          <section className="checkout-section"><div className="checkout-section-heading"><span>02</span><h2>Where to send it</h2></div>
-            <div className="form-row"><input name="firstName" defaultValue={initialDetails.address.firstName} required placeholder="First name" autoComplete="given-name" /><input name="lastName" defaultValue={initialDetails.address.lastName} required placeholder="Last name" autoComplete="family-name" /></div>
-            <input name="addressLine1" defaultValue={initialDetails.address.addressLine1} required placeholder="Address" autoComplete="address-line1" /><input name="addressLine2" defaultValue={initialDetails.address.addressLine2} placeholder="Apartment, suite (optional)" autoComplete="address-line2" />
-            <div className="form-row"><input name="city" defaultValue={initialDetails.address.city} required placeholder="City" autoComplete="address-level2" /><input name="region" defaultValue={initialDetails.address.region} required placeholder="State / region" autoComplete="address-level1" /></div>
-            <div className="form-row"><input name="postalCode" defaultValue={initialDetails.address.postalCode} required placeholder="Postal code" autoComplete="postal-code" /><input name="country" defaultValue={initialDetails.address.country} required placeholder="Country" autoComplete="country-name" /></div>
+          <section className="checkout-section"><div className="checkout-section-heading"><span>01</span><h2>{addressText.contact}</h2></div><input name="email" type="email" defaultValue={initialDetails.email} required placeholder={addressText.email} autoComplete="email" /></section>
+          <section className="checkout-section"><div className="checkout-section-heading"><span>02</span><h2>{addressText.addressSection}</h2></div>
+            <div className="form-row"><input name="firstName" defaultValue={initialDetails.address.firstName} required placeholder={addressText.firstName} autoComplete="given-name" /><input name="lastName" defaultValue={initialDetails.address.lastName} required placeholder={addressText.lastName} autoComplete="family-name" /></div>
+            <input name="addressLine1" defaultValue={initialDetails.address.addressLine1} required placeholder={addressText.address} autoComplete="address-line1" /><input name="addressLine2" defaultValue={initialDetails.address.addressLine2} placeholder={addressText.addressExtra} autoComplete="address-line2" />
+            <div className="form-row"><input name="city" defaultValue={initialDetails.address.city} required placeholder={addressText.city} autoComplete="address-level2" /><input name="region" defaultValue={initialDetails.address.region} required placeholder={addressText.region} autoComplete="address-level1" /></div>
+            <div className="form-row"><input name="postalCode" defaultValue={initialDetails.address.postalCode} required placeholder={addressText.postalCode} autoComplete="postal-code" /><input name="country" defaultValue={initialDetails.address.country} required placeholder={addressText.country} autoComplete="country-name" /></div>
           </section>
-          <button className="button button-dark full-button place-order-button">Continue to payment <span>↗</span></button>
+          <button className="button button-dark full-button place-order-button">{addressText.continue} <span>↗</span></button>
         </form>
         <CheckoutSummary products={items} quantities={quantities} subtotal={subtotal} />
       </div>
@@ -58,6 +59,6 @@ function CheckoutSummary({ products, quantities, subtotal }: { products: Product
   const shipping = subtotal >= 150 ? 0 : 8
   const tax = Math.round(subtotal * 0.08 * 100) / 100
   return (
-    <aside className="order-summary checkout-summary"><p className="eyebrow">Your selection</p><h2>Order summary</h2>{products.map((product) => <div className="checkout-product" key={product.id}><img src={product.image} alt="" /><div><strong>{product.name}</strong><small>{product.color} · Qty {quantities[product.id]}</small></div><span>${(product.price * quantities[product.id]).toFixed(2)}</span></div>)}<div className="checkout-totals"><p><span>Subtotal</span><span>${subtotal.toFixed(2)}</span></p><p><span>Shipping</span><span>{shipping ? `$${shipping.toFixed(2)}` : 'Complimentary'}</span></p><p><span>Estimated tax</span><span>${tax.toFixed(2)}</span></p><div className="summary-total"><strong>Estimated total</strong><strong>${(subtotal + shipping + tax).toFixed(2)}</strong></div></div></aside>
+    <aside className="order-summary checkout-summary"><p className="eyebrow">{addressText.summaryEyebrow}</p><h2>{addressText.summaryTitle}</h2>{products.map((product) => <div className="checkout-product" key={product.id}><img src={product.image} alt="" /><div><strong>{product.name}</strong><small>{product.color} · {addressText.quantity} {quantities[product.id]}</small></div><span>${(product.price * quantities[product.id]).toFixed(2)}</span></div>)}<div className="checkout-totals"><p><span>{addressText.subtotal}</span><span>${subtotal.toFixed(2)}</span></p><p><span>{addressText.shipping}</span><span>{shipping ? `$${shipping.toFixed(2)}` : addressText.complimentary}</span></p><p><span>{addressText.tax}</span><span>${tax.toFixed(2)}</span></p><div className="summary-total"><strong>{addressText.total}</strong><strong>${(subtotal + shipping + tax).toFixed(2)}</strong></div></div></aside>
   )
 }

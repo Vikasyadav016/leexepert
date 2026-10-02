@@ -1,15 +1,20 @@
 import { useState, type FormEvent } from "react";
+import type { AuthProfileInput } from "../../../../Services/AuthServices/AuthContext";
 import { AccountFieldIcon } from "./AccountFieldIcon";
+import { BrandLoader } from "../../components/BrandLoader";
+import signupText from "../../../../TextJson/Auth/CreateAccountPage.json";
 
 type CreateAccountPageProps = {
   method: "email" | "phone";
-  onSubmit: (event: FormEvent<HTMLFormElement>, message: string) => void;
-  onRequestOtp: (event: FormEvent<HTMLFormElement>, destination: string) => void;
+  isSubmitting: boolean;
+  onSubmit: (event: FormEvent<HTMLFormElement>, message: string, profile: AuthProfileInput) => void;
+  onRequestOtp: (event: FormEvent<HTMLFormElement>, destination: string, fullName: string) => void;
   onSignIn: () => void;
 };
 
 export function CreateAccountPage({
   method,
+  isSubmitting,
   onSubmit,
   onRequestOtp,
   onSignIn,
@@ -25,59 +30,60 @@ export function CreateAccountPage({
           <svg viewBox="0 0 24 24"><path d="M16 21v-1.5a4.5 4.5 0 0 0-4.5-4.5h-7A4.5 4.5 0 0 0 0 19.5V21m8-10a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm11-5v6m-3-3h6" transform="translate(2 0)" /></svg>
         </span>
         <div>
-          <h2>Create your account</h2>
-          <p>Join us for thoughtful pieces and considered care.</p>
+          <h2>{signupText.title}</h2>
+          <p>{signupText.description}</p>
         </div>
       </div>
       <form
         className="account-form"
         onSubmit={(event) => method === "phone"
-          ? onRequestOtp(event, phone)
+          ? onRequestOtp(event, phone, fullName)
           : onSubmit(
             event,
-            "Demo sign-up complete. Account creation is not connected yet, so no details were saved.",
+            signupText.demoSuccess,
+            { fullName, email },
           )
         }
       >
         <label className="account-field">
-          <span>Full name</span>
+          <span>{signupText.fullName}</span>
           <span className="account-input-wrap">
             <AccountFieldIcon name="user" />
-            <input required autoComplete="name" placeholder="Your full name" value={fullName} onChange={(event) => setFullName(event.target.value)} />
+            <input required autoComplete="name" placeholder={signupText.fullNamePlaceholder} value={fullName} onChange={(event) => setFullName(event.target.value)} />
           </span>
         </label>
         {method === "email" ? (
         <label className="account-field">
-          <span>Email address</span>
+          <span>{signupText.email}</span>
           <span className="account-input-wrap">
             <AccountFieldIcon name="mail" />
-            <input required type="email" autoComplete="email" placeholder="you@example.com" value={email} onChange={(event) => setEmail(event.target.value)} />
+            <input required type="email" autoComplete="email" placeholder={signupText.emailPlaceholder} value={email} onChange={(event) => setEmail(event.target.value)} />
           </span>
         </label>
         ) : (
           <label className="account-field">
-          <span>Mobile number</span>
+          <span>{signupText.phone}</span>
           <span className="account-input-wrap">
             <AccountFieldIcon name="phone" />
-            <input required type="tel" autoComplete="tel" placeholder="+1 555 0123" value={phone} onChange={(event) => setPhone(event.target.value)} />
+            <input required type="tel" autoComplete="tel" placeholder={signupText.phonePlaceholder} value={phone} onChange={(event) => setPhone(event.target.value)} />
           </span>
         </label>
         )}
         {method === "email" && (
           <label className="account-field">
-            <span>Password</span>
+            <span>{signupText.password}</span>
             <span className="account-input-wrap">
               <AccountFieldIcon name="lock" />
-              <input required type="password" autoComplete="new-password" minLength={8} placeholder="At least 8 characters" />
+              <input required type="password" autoComplete="new-password" minLength={8} placeholder={signupText.passwordPlaceholder} />
             </span>
           </label>
         )}
         <button className="account-submit" type="submit">
-          <span>{method === "phone" ? "Continue with mobile" : "Create account"}</span><span aria-hidden="true">↗</span>
+          {isSubmitting ? <BrandLoader fullScreen={false} label={signupText.loaderSignup} /> : <><span>{method === "phone" ? signupText.continuePhone : signupText.signup}</span><span aria-hidden="true">↗</span></>}
         </button>
-        <p className="account-legal">{method === "phone" ? "We’ll verify your mobile number with a one-time code." : <>By creating an account, you agree to our <a href="/policies">Terms</a> and <a href="/policies">Privacy Policy</a>.</>}</p>
+        <p className="account-legal">{method === "phone" ? signupText.phoneHint : <>{signupText.termsLead} <a href="/policies">{signupText.terms}</a> and <a href="/policies">{signupText.privacy}</a>.</>}</p>
         <button type="button" className="account-switch-link" onClick={onSignIn}>
-          Already have an account? <strong>Sign in</strong>
+          {signupText.signinPrompt} <strong>{signupText.signin}</strong>
         </button>
       </form>
     </div>

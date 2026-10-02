@@ -6,6 +6,7 @@ import { PoliciesPage } from "./customer/PoliciesPage";
 import { ReturnsPage } from "./customer/ReturnsPage";
 import { TrackOrderPage } from "./customer/TrackOrderPage";
 import type { Page } from "../types";
+import type { AuthProfileInput } from "../../../Services/AuthServices/AuthContext";
 
 type CustomerPagesProps = {
   page: Extract<
@@ -18,6 +19,7 @@ type CustomerPagesProps = {
     | "Policies"
   >;
   onNotice: (message: string, options?: { placement?: "top-center" }) => void;
+  onAuthenticated: (profile: AuthProfileInput) => void;
   onSubmit: (event: FormEvent<HTMLFormElement>, message: string) => void;
   onShop: () => void;
 };
@@ -25,12 +27,13 @@ type CustomerPagesProps = {
 export function CustomerPages({
   page,
   onNotice,
+  onAuthenticated,
   onSubmit,
   onShop,
 }: CustomerPagesProps) {
   switch (page) {
     case "Account":
-      return <AccountPage onNotice={onNotice} />;
+      return <AccountPage onNotice={onNotice} onAuthenticated={onAuthenticated} />;
     case "Returns":
       return <ReturnsPage onSubmit={onSubmit} />;
     case "Track Order":

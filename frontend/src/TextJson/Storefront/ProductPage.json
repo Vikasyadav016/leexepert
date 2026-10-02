@@ -1,0 +1,15 @@
+{
+  "linenDescriptor": "100% linen",
+  "color": "Color",
+  "selectSize": "Select size",
+  "chooseSize": "Choose a size",
+  "sizes": ["XS", "S", "M", "L", "XL"],
+  "naturalLinen": "natural linen",
+  "terracotta": "terracotta",
+  "addToBag": "Add to bag",
+  "buyNow": "Buy now",
+  "removeWishlist": "Remove from wishlist",
+  "addWishlist": "Add to wishlist",
+  "shipping": "Free shipping on orders over $150",
+  "returns": "Easy returns within 30 days"
+}

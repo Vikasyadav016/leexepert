@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom'
+import backText from '../../../TextJson/Shared/BackButton.json'
 import './BackButton.css'
 
 function fallbackPath(pathname: string): string {
@@ -15,12 +16,12 @@ export function BackButton() {
   const location = useLocation()
   const historyIndex = window.history.state?.idx
 
-  if (location.pathname === '/' && !(typeof historyIndex === 'number' && historyIndex > 0)) return null
+  if (location.pathname === '/') return null
 
   function goBack() {
     if (typeof historyIndex === 'number' && historyIndex > 0) navigate(-1)
     else navigate(fallbackPath(location.pathname), { replace: true })
   }
 
-  return <button className="back-button" type="button" onClick={goBack}><span aria-hidden="true">←</span> Back</button>
+  return <button className="back-button" type="button" onClick={goBack}><span aria-hidden="true">←</span> {backText.label}</button>
 }

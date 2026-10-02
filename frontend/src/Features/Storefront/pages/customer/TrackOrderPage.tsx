@@ -1,4 +1,5 @@
 import type { FormEvent } from "react";
+import trackText from "../../../../TextJson/Customer/TrackOrderPage.json";
 
 type TrackOrderPageProps = {
   onSubmit: (event: FormEvent<HTMLFormElement>, message: string) => void;
@@ -7,24 +8,22 @@ type TrackOrderPageProps = {
 export function TrackOrderPage({ onSubmit }: TrackOrderPageProps) {
   return (
     <section className="section-block content-page narrow-page">
-      <p className="eyebrow">On its way?</p>
-      <h1>Track your order</h1>
-      <p className="page-intro">
-        Enter your order details and we'll help you find your parcel.
-      </p>
+      <p className="eyebrow">{trackText.eyebrow}</p>
+      <h1>{trackText.title}</h1>
+      <p className="page-intro">{trackText.intro}</p>
       <form
         className="simple-form"
         onSubmit={(event) =>
           onSubmit(
             event,
-            "Tracking details are not connected yet. Please check your shipping confirmation email.",
+            trackText.notConnected,
           )
         }
       >
-        <input required placeholder="Order number" />
-        <input required type="email" placeholder="Email address" />
+        <input required placeholder={trackText.orderNumber} />
+        <input required type="email" placeholder={trackText.email} />
         <button className="button button-dark full-button">
-          Find my order
+          {trackText.submit}
         </button>
       </form>
     </section>

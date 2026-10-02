@@ -1,4 +1,5 @@
 import type { FormEvent } from "react";
+import returnsText from "../../../../TextJson/Customer/ReturnsPage.json";
 
 type ReturnsPageProps = {
   onSubmit: (event: FormEvent<HTMLFormElement>, message: string) => void;
@@ -7,33 +8,30 @@ type ReturnsPageProps = {
 export function ReturnsPage({ onSubmit }: ReturnsPageProps) {
   return (
     <section className="section-block content-page narrow-page">
-      <p className="eyebrow">Here to help</p>
-      <h1>Returns</h1>
-      <p className="page-intro">
-        We hope you love your Leex pieces. If something isn't quite right, start
-        a return within 30 days of delivery.
-      </p>
+      <p className="eyebrow">{returnsText.eyebrow}</p>
+      <h1>{returnsText.title}</h1>
+      <p className="page-intro">{returnsText.intro}</p>
       <form
         className="simple-form"
         onSubmit={(event) =>
           onSubmit(
             event,
-            "Return request received. Our care team will be in touch.",
+            returnsText.success,
           )
         }
       >
-        <input required placeholder="Order number" />
-        <input required type="email" placeholder="Email used at checkout" />
+        <input required placeholder={returnsText.orderNumber} />
+        <input required type="email" placeholder={returnsText.checkoutEmail} />
         <select required defaultValue="">
           <option value="" disabled>
-            Reason for return
+            {returnsText.reasonPlaceholder}
           </option>
-          <option>Fit wasn't right</option>
-          <option>Changed my mind</option>
-          <option>Something else</option>
+          <option>{returnsText.fit}</option>
+          <option>{returnsText.changedMind}</option>
+          <option>{returnsText.other}</option>
         </select>
         <button className="button button-dark full-button">
-          Start a return
+          {returnsText.submit}
         </button>
       </form>
     </section>

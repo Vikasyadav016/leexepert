@@ -1,0 +1,15 @@
+{
+  "eyebrow": "A record of the good things",
+  "title": "Order history",
+  "order": "order",
+  "orders": "orders",
+  "intro": "Your past purchases, all in one place. Demo orders are saved in this browser.",
+  "emptyTitle": "No orders just yet.",
+  "emptyBody": "Your first favorite is waiting to be found.",
+  "shop": "Explore the collection",
+  "quantity": "Qty",
+  "rated": "Rated",
+  "paidWith": "Paid with",
+  "totalPaid": "Total paid",
+  "delivery": "View delivery details"
+}

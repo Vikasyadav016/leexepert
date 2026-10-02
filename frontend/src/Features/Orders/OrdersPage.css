@@ -12,6 +12,9 @@
 .history-order-line div { display: grid; gap: 5px; }
 .history-order-line strong { color: var(--forest); font: 400 16px var(--serif); }
 .history-order-line div span, .history-order-line > span { color: var(--muted); font-size: 9px; }
+.history-order-rating { display: flex; align-items: center; gap: 6px; margin-top: 2px; }
+.history-order-rating .rating-star { font-size: 13px; }
+.history-order-rating small { color: var(--muted); font-size: 8px; }
 .history-order-summary { display: grid; align-content: start; gap: 9px; padding-left: 20px; border-left: 1px solid var(--line); color: var(--muted); font-size: 9px; }
 .history-order-summary > div { display: flex; justify-content: space-between; gap: 9px; margin: 4px 0; padding-top: 11px; border-top: 1px solid var(--line); color: var(--forest); font-size: 11px; }
 .history-order-summary .text-link { justify-self: start; font-size: 10px; }

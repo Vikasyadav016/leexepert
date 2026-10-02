@@ -10,6 +10,7 @@ export const pagePaths: Record<Page, string> = {
   Wishlist: '/wishlist',
   Checkout: '/checkout/address',
   Account: '/account',
+  Profile: '/profile',
   Orders: '/orders',
   Returns: '/returns',
   'Track Order': '/track-order',
@@ -27,6 +28,7 @@ export function pageForPath(pathname: string): Page {
   if (pathname === '/cart') return 'Cart'
   if (pathname.startsWith('/wishlist')) return 'Wishlist'
   if (pathname === '/account') return 'Account'
+  if (pathname === '/profile') return 'Profile'
   if (pathname === '/orders') return 'Orders'
   if (pathname === '/returns') return 'Returns'
   if (pathname === '/track-order') return 'Track Order'

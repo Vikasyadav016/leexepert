@@ -1,0 +1,22 @@
+{
+  "title": "Create your account",
+  "description": "Join us for thoughtful pieces and considered care.",
+  "fullName": "Full name",
+  "fullNamePlaceholder": "Your full name",
+  "email": "Email address",
+  "emailPlaceholder": "you@example.com",
+  "phone": "Mobile number",
+  "phonePlaceholder": "+1 555 0123",
+  "password": "Password",
+  "passwordPlaceholder": "At least 8 characters",
+  "signup": "Create account",
+  "continuePhone": "Continue with mobile",
+  "loaderSignup": "Creating account…",
+  "phoneHint": "We’ll verify your mobile number with a one-time code.",
+  "termsLead": "By creating an account, you agree to our",
+  "terms": "Terms",
+  "privacy": "Privacy Policy",
+  "signinPrompt": "Already have an account?",
+  "signin": "Sign in",
+  "demoSuccess": "Demo sign-up complete. Account creation is not connected yet, so no details were saved."
+}

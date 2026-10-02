@@ -1,5 +1,6 @@
 import type { CartQuantities, Product } from '../Storefront/types'
 import { EmptyState } from '../Storefront/components/ProductGrid'
+import cartText from '../../TextJson/Cart/CartPage.json'
 import './CartPage.css'
 
 type CartPageProps = {
@@ -16,20 +17,20 @@ export function CartPage({ products, quantities, total, onNavigate, onSetQuantit
 
   return (
     <section className="section-block content-page">
-      <p className="eyebrow">Your selection</p>
-      <h1>Your bag <span className="heading-count">({count})</span></h1>
-      {!count ? <EmptyState title="Your bag is taking a breather." action="Shop the collection" onClick={() => onNavigate('Shop')} /> : (
+      <p className="eyebrow">{cartText.eyebrow}</p>
+      <h1>{cartText.title} <span className="heading-count">({count})</span></h1>
+      {!count ? <EmptyState title={cartText.emptyTitle} action={cartText.shop} onClick={() => onNavigate('Shop')} /> : (
         <div className="cart-layout">
           <div className="cart-lines">
             {cartProducts.map((product) => (
               <div className="cart-line" key={product.id}>
                 <img src={product.image} alt={product.name} />
-                <div className="cart-product"><span className="cart-product-name">{product.name}</span><span>{product.color} · {product.category}</span><div className="quantity"><button aria-label={`Remove one ${product.name}`} onClick={() => onSetQuantity(product.id, quantities[product.id] - 1)}>−</button><span>{quantities[product.id]}</span><button aria-label={`Add one ${product.name}`} onClick={() => onSetQuantity(product.id, quantities[product.id] + 1)}>+</button></div></div>
+                <div className="cart-product"><span className="cart-product-name">{product.name}</span><span>{product.color} · {product.category}</span><div className="quantity"><button aria-label={cartText.removeOne.replace('{name}', product.name)} onClick={() => onSetQuantity(product.id, quantities[product.id] - 1)}>−</button><span>{quantities[product.id]}</span><button aria-label={cartText.addOne.replace('{name}', product.name)} onClick={() => onSetQuantity(product.id, quantities[product.id] + 1)}>+</button></div></div>
                 <strong>${(product.price * quantities[product.id]).toFixed(2)}</strong>
               </div>
             ))}
           </div>
-          <aside className="order-summary"><p className="eyebrow">A little summary</p><h2>Order total</h2><p><span>Subtotal</span><span>${total.toFixed(2)}</span></p><p><span>Shipping</span><span>{total >= 150 ? 'Complimentary' : '$8.00 at checkout'}</span></p><div className="summary-total"><span>Subtotal</span><strong>${total.toFixed(2)}</strong></div><button className="button button-dark full-button" onClick={() => onNavigate('Checkout')}>Continue to checkout <span>↗</span></button><p className="secure-note">Demo checkout · no real payment is collected.</p></aside>
+          <aside className="order-summary"><p className="eyebrow">{cartText.summaryEyebrow}</p><h2>{cartText.total}</h2><p><span>{cartText.subtotal}</span><span>${total.toFixed(2)}</span></p><p><span>{cartText.shipping}</span><span>{total >= 150 ? cartText.complimentary : cartText.shippingAtCheckout}</span></p><div className="summary-total"><span>{cartText.subtotal}</span><strong>${total.toFixed(2)}</strong></div><button className="button button-dark full-button" onClick={() => onNavigate('Checkout')}>{cartText.checkout} <span>↗</span></button><p className="secure-note">{cartText.demoNote}</p></aside>
         </div>
       )}
     </section>

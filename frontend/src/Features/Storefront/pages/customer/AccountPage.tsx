@@ -1,22 +1,27 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { BrandLoader } from "../../components/BrandLoader";
+import type { AuthProfileInput } from "../../../../Services/AuthServices/AuthContext";
 import { AccountFieldIcon } from "./AccountFieldIcon";
 import { CreateAccountPage } from "./CreateAccountPage";
 import { VerifyOtpPage } from "./VerifyOtpPage";
+import accountText from "../../../../TextJson/Auth/AccountPage.json";
+import brandText from "../../../../TextJson/Brand.json";
 import "./Account.css";
 
 type AccountPageProps = {
   onNotice: (message: string, options?: { placement?: "top-center" }) => void;
+  onAuthenticated: (profile: AuthProfileInput) => void;
 };
 
 type AccountMethod = "email" | "phone";
-type OtpChallenge = { flow: "login" | "signup"; destination: string };
+type OtpChallenge = { flow: "login" | "signup"; destination: string; profile: AuthProfileInput };
 
-export function AccountPage({ onNotice }: AccountPageProps) {
+export function AccountPage({ onNotice, onAuthenticated }: AccountPageProps) {
   const [showSignup, setShowSignup] = useState(false);
   const [accountMethod, setAccountMethod] = useState<AccountMethod>("email");
   const [otpChallenge, setOtpChallenge] = useState<OtpChallenge | null>(null);
   const [loginPhone, setLoginPhone] = useState("");
+  const [loginEmail, setLoginEmail] = useState("");
   const [pendingForm, setPendingForm] = useState<"login" | "signup" | null>(null);
   const timeoutRef = useRef<number | null>(null);
 
@@ -24,21 +29,22 @@ export function AccountPage({ onNotice }: AccountPageProps) {
     if (timeoutRef.current !== null) window.clearTimeout(timeoutRef.current);
   }, []);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>, message: string, form: "login" | "signup") {
+  function handleSubmit(event: FormEvent<HTMLFormElement>, message: string, form: "login" | "signup", profile: AuthProfileInput) {
     event.preventDefault();
     if (pendingForm) return;
 
     setPendingForm(form);
     timeoutRef.current = window.setTimeout(() => {
       setPendingForm(null);
+      onAuthenticated(profile);
       onNotice(message, { placement: "top-center" });
     }, 3000);
   }
 
-  function requestOtp(event: FormEvent<HTMLFormElement>, destination: string, flow: OtpChallenge["flow"]) {
+  function requestOtp(event: FormEvent<HTMLFormElement>, destination: string, flow: OtpChallenge["flow"], profile: AuthProfileInput) {
     event.preventDefault();
-    setOtpChallenge({ flow, destination });
-    onNotice(`Demo verification code sent to ${destination}.`, { placement: "top-center" });
+    setOtpChallenge({ flow, destination, profile });
+    onNotice(accountText.otpSent.replace("{destination}", destination), { placement: "top-center" });
   }
 
   const flipState = otpChallenge
@@ -47,26 +53,25 @@ export function AccountPage({ onNotice }: AccountPageProps) {
 
   return (
     <section className="account-access-page">
-      {pendingForm && <BrandLoader fullScreen />}
       <aside className="account-brand-panel">
         <div className="account-brand-topline">
           <span className="account-brand-mark" aria-hidden="true">L</span>
-          <span>LEEX / STUDIO</span>
+          <span>{brandText.name} / STUDIO</span>
         </div>
         <div className="account-brand-copy">
-          <p className="account-kicker">A more considered wardrobe</p>
-          <h1>Make room<br />for what lasts.</h1>
-          <p>Thoughtful linen. Pieces to keep close. A little more ease in every day.</p>
+          <p className="account-kicker">{accountText.brandEyebrow}</p>
+          <h1>{accountText.brandHeadline[0]}<br />{accountText.brandHeadline[1]}</h1>
+          <p>{accountText.brandDescription}</p>
         </div>
         <div className="account-brand-bottom">
-          <span>Designed for living, not just looking.</span>
+          <span>{accountText.brandFooter}</span>
           <span>01 — 03</span>
         </div>
       </aside>
 
       <div className="account-form-panel">
         <div className="account-panel-heading">
-          <p className="account-kicker">Your Leex account</p>
+          <p className="account-kicker">{accountText.accountLabel.replace("Leex", brandText.name)}</p>
           <div className="account-mode-switch" role="group" aria-label="Account access mode">
             <button
               type="button"
@@ -74,7 +79,7 @@ export function AccountPage({ onNotice }: AccountPageProps) {
               aria-pressed={!showSignup}
               onClick={() => { setOtpChallenge(null); setShowSignup(false); }}
             >
-              Sign in
+              {accountText.signinTab}
             </button>
             <button
               type="button"
@@ -82,17 +87,17 @@ export function AccountPage({ onNotice }: AccountPageProps) {
               aria-pressed={showSignup}
               onClick={() => { setOtpChallenge(null); setShowSignup(true); }}
             >
-              Create account
+              {accountText.signupTab}
             </button>
           </div>
         </div>
         {!otpChallenge && (
-          <div className="account-method-switch" role="group" aria-label="Choose sign-in method">
+          <div className="account-method-switch" role="group" aria-label={accountText.methodLabel}>
             <button type="button" className={accountMethod === "email" ? "selected" : ""} aria-pressed={accountMethod === "email"} onClick={() => { setOtpChallenge(null); setAccountMethod("email"); }}>
-              <AccountFieldIcon name="mail" /> Email
+              <AccountFieldIcon name="mail" /> {accountText.emailMethod}
             </button>
             <button type="button" className={accountMethod === "phone" ? "selected" : ""} aria-pressed={accountMethod === "phone"} onClick={() => { setOtpChallenge(null); setAccountMethod("phone"); }}>
-              <AccountFieldIcon name="phone" /> Mobile
+              <AccountFieldIcon name="phone" /> {accountText.phoneMethod}
             </button>
           </div>
         )}
@@ -105,31 +110,31 @@ export function AccountPage({ onNotice }: AccountPageProps) {
                     <svg viewBox="0 0 24 24"><path d="M20 21v-1.5a4.5 4.5 0 0 0-4.5-4.5h-7A4.5 4.5 0 0 0 4 19.5V21M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" /></svg>
                   </span>
                   <div>
-                    <h2>Welcome back</h2>
-                    <p>Sign in to pick up where you left off.</p>
+                    <h2>{accountText.welcome}</h2>
+                    <p>{accountText.welcomeDescription}</p>
                   </div>
                 </div>
                 {accountMethod === "email" ? (
-                  <form className="account-form" onSubmit={(event) => handleSubmit(event, "Demo sign-in complete. Authentication is not connected yet.", "login")}>
+                  <form className="account-form" onSubmit={(event) => handleSubmit(event, accountText.demoSigninSuccess, "login", { fullName: "", email: loginEmail })}>
                     <label className="account-field">
-                      <span>Email address</span>
-                      <span className="account-input-wrap"><AccountFieldIcon name="mail" /><input required type="email" autoComplete="email" placeholder="you@example.com" /></span>
+                      <span>{accountText.emailLabel}</span>
+                      <span className="account-input-wrap"><AccountFieldIcon name="mail" /><input required type="email" autoComplete="email" value={loginEmail} onChange={(event) => setLoginEmail(event.target.value)} placeholder={accountText.emailPlaceholder} /></span>
                     </label>
                     <label className="account-field">
-                      <span>Password</span>
-                      <span className="account-input-wrap"><AccountFieldIcon name="lock" /><input required type="password" autoComplete="current-password" placeholder="Enter your password" /></span>
+                      <span>{accountText.passwordLabel}</span>
+                      <span className="account-input-wrap"><AccountFieldIcon name="lock" /><input required type="password" autoComplete="current-password" placeholder={accountText.passwordPlaceholder} /></span>
                     </label>
-                    <button className="account-submit" type="submit"><span>Sign in</span><span aria-hidden="true">↗</span></button>
-                    <p className="account-legal">By continuing, you agree to our <a href="/policies">Terms</a> and <a href="/policies">Privacy Policy</a>.</p>
+                    <button className="account-submit" type="submit" disabled={pendingForm !== null}>{pendingForm === "login" ? <BrandLoader fullScreen={false} label={accountText.loaderSignin} /> : <><span>{accountText.signinAction}</span><span aria-hidden="true">↗</span></>}</button>
+                    <p className="account-legal">{accountText.termsLead} <a href="/policies">{accountText.terms}</a> and <a href="/policies">{accountText.privacy}</a>.</p>
                   </form>
                 ) : (
-                  <form className="account-form" onSubmit={(event) => requestOtp(event, loginPhone, "login")}>
+                  <form className="account-form" onSubmit={(event) => requestOtp(event, loginPhone, "login", { fullName: "", phone: loginPhone })}>
                     <label className="account-field">
-                      <span>Mobile number</span>
-                      <span className="account-input-wrap"><AccountFieldIcon name="phone" /><input required type="tel" autoComplete="tel" value={loginPhone} onChange={(event) => setLoginPhone(event.target.value)} placeholder="+1 555 0123" /></span>
+                      <span>{accountText.phoneLabel}</span>
+                      <span className="account-input-wrap"><AccountFieldIcon name="phone" /><input required type="tel" autoComplete="tel" value={loginPhone} onChange={(event) => setLoginPhone(event.target.value)} placeholder={accountText.phonePlaceholder} /></span>
                     </label>
-                    <button className="account-submit" type="submit"><span>Send verification code</span><span aria-hidden="true">↗</span></button>
-                    <p className="account-legal">We’ll send a one-time code to verify your mobile number. No password needed.</p>
+                    <button className="account-submit" type="submit"><span>{accountText.otpAction}</span><span aria-hidden="true">↗</span></button>
+                    <p className="account-legal">{accountText.phoneDescription}</p>
                   </form>
                 )}
               </fieldset>
@@ -138,8 +143,9 @@ export function AccountPage({ onNotice }: AccountPageProps) {
               <fieldset className="account-face-fieldset" disabled={!showSignup || Boolean(otpChallenge) || pendingForm !== null}>
                 <CreateAccountPage
                   method={accountMethod}
-                  onSubmit={(event, message) => handleSubmit(event, message, "signup")}
-                  onRequestOtp={(event, destination) => requestOtp(event, destination, "signup")}
+                  isSubmitting={pendingForm === "signup"}
+                  onSubmit={(event, message, profile) => handleSubmit(event, message, "signup", profile)}
+                  onRequestOtp={(event, destination, fullName) => requestOtp(event, destination, "signup", { fullName, phone: destination })}
                   onSignIn={() => setShowSignup(false)}
                 />
               </fieldset>
@@ -149,16 +155,17 @@ export function AccountPage({ onNotice }: AccountPageProps) {
                 {otpChallenge && (
                   <VerifyOtpPage
                     destination={otpChallenge.destination}
+                    isSubmitting={pendingForm === otpChallenge.flow}
                     onBack={() => setOtpChallenge(null)}
-                    onResend={() => onNotice(`A new demo verification code was sent to ${otpChallenge.destination}.`, { placement: "top-center" })}
-                    onSubmit={(event) => handleSubmit(event, otpChallenge.flow === "signup" ? "Demo phone verification complete. Account creation is not connected yet." : "Demo phone sign-in complete. Authentication is not connected yet.", otpChallenge.flow)}
+                    onResend={() => onNotice(accountText.otpResent.replace("{destination}", otpChallenge.destination), { placement: "top-center" })}
+                    onSubmit={(event) => handleSubmit(event, otpChallenge.flow === "signup" ? accountText.demoPhoneSignupSuccess : accountText.demoPhoneSigninSuccess, otpChallenge.flow, otpChallenge.profile)}
                   />
                 )}
               </fieldset>
             </div>
           </div>
         </div>
-        <p className="account-support">Need a hand? <a href="mailto:hello@leex.com">We’re here for you.</a></p>
+        <p className="account-support">{accountText.supportLead} <a href="mailto:hello@leex.com">{accountText.supportLink}</a></p>
       </div>
     </section>
   );

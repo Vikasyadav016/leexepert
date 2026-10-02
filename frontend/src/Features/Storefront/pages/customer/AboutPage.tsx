@@ -1,4 +1,5 @@
 import "./AboutPage.css";
+import aboutText from "../../../../TextJson/Customer/AboutPage.json";
 
 type AboutPageProps = {
   onShop: () => void;
@@ -7,25 +8,17 @@ type AboutPageProps = {
 export function AboutPage({ onShop }: AboutPageProps) {
   return (
     <section className="section-block content-page editorial-page">
-      <p className="eyebrow">A considered wardrobe</p>
-      <h1>Less, but lived in.</h1>
-      <p className="editorial-lead">
-        Leex began with a simple thought: the things we wear every day should
-        feel a little more like ourselves.
-      </p>
+      <p className="eyebrow">{aboutText.eyebrow}</p>
+      <h1>{aboutText.title}</h1>
+      <p className="editorial-lead">{aboutText.lead}</p>
       <div
         className="editorial-image"
         role="img"
-        aria-label="Timeless natural fabric and clothing"
+        aria-label={aboutText.imageAlt}
       />
-      <p className="page-intro">
-        We make small collections of lasting essentials in natural linen. We
-        choose fabrics for how they feel, work with makers who care about their
-        craft, and design for real life: creases, sunlight, long lunches and
-        all.
-      </p>
+      <p className="page-intro">{aboutText.body}</p>
       <button className="button button-dark" onClick={onShop}>
-        Meet the collection <span>↗</span>
+        {aboutText.shop} <span>↗</span>
       </button>
     </section>
   );

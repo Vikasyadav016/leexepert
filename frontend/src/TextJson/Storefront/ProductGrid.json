@@ -1,0 +1,15 @@
+{
+  "addToWishlist": "Add to wishlist",
+  "removeFromWishlist": "Remove from wishlist",
+  "empty": {
+    "title": "No pieces found.",
+    "body": "Try another search or browse the full collection."
+  },
+  "cart": {
+    "quickAdd": "Quick add +",
+    "addMore": "Add more",
+    "remove": "Remove",
+    "addToWishlist": "Add to wishlist",
+    "removeFromWishlist": "Remove from wishlist"
+  }
+}

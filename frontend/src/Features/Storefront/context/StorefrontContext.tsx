@@ -4,11 +4,13 @@ import orderData from '../../DummyDataTest/orders.json'
 import paymentData from '../../DummyDataTest/payment-methods.json'
 import wishlistData from '../../DummyDataTest/wishlist.json'
 import wishlistHistoryData from '../../DummyDataTest/wishlist-history.json'
+import { getPersistedUserId, saveAccountStoreData, type AuthStoreData } from '../../../Services/AuthServices/AuthContext'
 import type { ToastNotice, ToastPlacement } from '../components/PremiumToast'
 import { products } from '../data/products'
+import storeText from '../../../TextJson/Storefront/StorefrontContext.json'
 import type { Address, CartQuantities, CheckoutSubmission, DemoOrder, PaymentMethod, Product, WishlistEvent, WishlistItem } from '../types'
 
-type WishlistState = { items: WishlistItem[]; events: WishlistEvent[] }
+export type WishlistState = { items: WishlistItem[]; events: WishlistEvent[] }
 type CheckoutDetails = { email: string; address: Address }
 
 type StorefrontContextValue = {
@@ -29,10 +31,12 @@ type StorefrontContextValue = {
   buyNow: (product: Product) => void
   setQuantity: (productId: number, quantity: number) => void
   toggleWishlist: (product: Product) => void
+  restoreAccountData: (data: AuthStoreData) => void
   checkoutDetails: CheckoutDetails
   updateCheckoutDetails: (details: CheckoutDetails) => void
   paymentMethods: PaymentMethod[]
-  placeOrder: (submission: CheckoutSubmission) => void
+  placeOrder: (submission: CheckoutSubmission) => DemoOrder | null
+  rateOrderItem: (orderId: string, productId: number, rating: number) => void
 }
 
 const StorefrontContext = createContext<StorefrontContextValue | null>(null)
@@ -73,12 +77,16 @@ export function StorefrontProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => { window.localStorage.setItem('leex-demo-cart', JSON.stringify(cart)) }, [cart])
   useEffect(() => { window.localStorage.setItem('leex-demo-wishlist', JSON.stringify(wishlist)) }, [wishlist])
+  useEffect(() => {
+    const userId = getPersistedUserId()
+    if (userId) saveAccountStoreData(userId, { cart, wishlist })
+  }, [cart, wishlist])
   useEffect(() => { window.localStorage.setItem('leex-demo-orders', JSON.stringify(orders)) }, [orders])
   useEffect(() => { window.localStorage.setItem('leex-demo-checkout', JSON.stringify(checkoutDetails)) }, [checkoutDetails])
 
   function addToCart(product: Product, amount = 1) {
     setCart((current) => ({ ...current, [product.id]: (current[product.id] ?? 0) + amount }))
-    notify(`${product.name} added to your bag`)
+    notify(storeText.productAdded.replace('{name}', product.name))
   }
 
   function buyNow(product: Product) {
@@ -109,7 +117,12 @@ export function StorefrontProvider({ children }: { children: ReactNode }) {
     })
   }
 
-  function placeOrder(submission: CheckoutSubmission) {
+  function restoreAccountData(data: AuthStoreData) {
+    setCart(data.cart)
+    setWishlist(data.wishlist)
+  }
+
+  function placeOrder(submission: CheckoutSubmission): DemoOrder | null {
     const lines = products.filter((product) => cart[product.id] > 0).map((product) => ({
       productId: product.id,
       name: product.name,
@@ -118,7 +131,7 @@ export function StorefrontProvider({ children }: { children: ReactNode }) {
       unitPrice: product.price,
       quantity: cart[product.id],
     }))
-    if (!lines.length) return
+    if (!lines.length) return null
 
     const subtotal = lines.reduce((sum, line) => sum + line.unitPrice * line.quantity, 0)
     const shipping = subtotal >= 150 ? 0 : 8
@@ -143,7 +156,15 @@ export function StorefrontProvider({ children }: { children: ReactNode }) {
 
     setOrders((current) => [order, ...current])
     setCart({})
-    notify(`Order ${orderNumber} placed. This was a simulated payment; no charge was made.`)
+    return order
+  }
+
+  function rateOrderItem(orderId: string, productId: number, rating: number) {
+    const safeRating = Math.min(5, Math.max(1, Math.round(rating)))
+    setOrders((current) => current.map((order) => order.id !== orderId ? order : {
+      ...order,
+      lines: order.lines.map((line) => line.productId === productId ? { ...line, rating: safeRating } : line),
+    }))
   }
 
   function notify(message: string, options: { placement?: ToastPlacement; duration?: number } = {}) {
@@ -173,10 +194,12 @@ export function StorefrontProvider({ children }: { children: ReactNode }) {
     buyNow,
     setQuantity,
     toggleWishlist,
+    restoreAccountData,
     checkoutDetails,
     updateCheckoutDetails: setCheckoutDetails,
     paymentMethods: demoPaymentMethods,
     placeOrder,
+    rateOrderItem,
   }
 
   return <StorefrontContext.Provider value={value}>{children}</StorefrontContext.Provider>

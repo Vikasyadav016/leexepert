@@ -1,9 +1,12 @@
 import type { FormEvent } from "react";
 import { AccountFieldIcon } from "./AccountFieldIcon";
+import { BrandLoader } from "../../components/BrandLoader";
+import otpText from "../../../../TextJson/Auth/VerifyOtpPage.json";
 import "./VerifyOtpPage.css";
 
 type VerifyOtpPageProps = {
   destination: string;
+  isSubmitting: boolean;
   onBack: () => void;
   onResend: () => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
@@ -11,6 +14,7 @@ type VerifyOtpPageProps = {
 
 export function VerifyOtpPage({
   destination,
+  isSubmitting,
   onBack,
   onResend,
   onSubmit,
@@ -22,13 +26,13 @@ export function VerifyOtpPage({
           <AccountFieldIcon name="phone" />
         </span>
         <div>
-          <h2>Verify your number</h2>
-          <p>Enter the 6-digit code sent to {destination}.</p>
+          <h2>{otpText.title}</h2>
+          <p>{otpText.description.replace("{destination}", destination)}</p>
         </div>
       </div>
       <form className="account-form" onSubmit={onSubmit}>
         <label className="account-field">
-          <span>Verification code</span>
+          <span>{otpText.code}</span>
           <span className="account-input-wrap">
             <input
               className="otp-code-input"
@@ -39,20 +43,20 @@ export function VerifyOtpPage({
               pattern="[0-9]{6}"
               minLength={6}
               maxLength={6}
-              placeholder="000000"
+              placeholder={otpText.placeholder}
               aria-describedby="otp-help"
             />
           </span>
         </label>
-        <p id="otp-help" className="account-legal">For this demo, enter any six digits.</p>
-        <button className="account-submit" type="submit">
-          <span>Verify and continue</span><span aria-hidden="true">↗</span>
+        <p id="otp-help" className="account-legal">{otpText.demoHint}</p>
+        <button className="account-submit" type="submit" disabled={isSubmitting}>
+          {isSubmitting ? <BrandLoader fullScreen={false} label={otpText.loaderVerify} /> : <><span>{otpText.submit}</span><span aria-hidden="true">↗</span></>}
         </button>
         <button className="otp-resend" type="button" onClick={onResend}>
-          Didn’t receive a code? <strong>Resend code</strong>
+          {otpText.resendPrompt} <strong>{otpText.resend}</strong>
         </button>
         <button className="account-switch-link" type="button" onClick={onBack}>
-          <strong>←</strong> Back to previous step
+          <strong>←</strong> {otpText.back}
         </button>
       </form>
     </div>

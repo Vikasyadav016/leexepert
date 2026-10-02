@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
+import toastText from "../../TextJson/Shared/PremiumToast.json";
 import "./PremiumToast.css";
 
 export type ToastPlacement =
@@ -43,7 +44,7 @@ export function PremiumToast({ notice, onDismiss }: PremiumToastProps) {
         className="premium-toast-dismiss"
         type="button"
         onClick={onDismiss}
-        aria-label="Dismiss notification"
+        aria-label={toastText.dismiss}
       >
         ×
       </button>

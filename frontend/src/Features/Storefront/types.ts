@@ -8,6 +8,7 @@ export type Page =
   | 'Wishlist'
   | 'Checkout'
   | 'Account'
+  | 'Profile'
   | 'Orders'
   | 'Returns'
   | 'Track Order'
@@ -60,6 +61,7 @@ export type OrderLine = {
   image: string
   unitPrice: number
   quantity: number
+  rating?: number
 }
 
 export type DemoOrder = {

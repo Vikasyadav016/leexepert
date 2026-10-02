@@ -1,0 +1,12 @@
+{
+  "title": "Verify your number",
+  "description": "Enter the 6-digit code sent to {destination}.",
+  "code": "Verification code",
+  "placeholder": "000000",
+  "demoHint": "For this demo, enter any six digits.",
+  "submit": "Verify and continue",
+  "loaderVerify": "Verifying…",
+  "resendPrompt": "Didn’t receive a code?",
+  "resend": "Resend code",
+  "back": "Back to previous step"
+}
