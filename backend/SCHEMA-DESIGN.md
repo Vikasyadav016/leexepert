@@ -49,7 +49,7 @@ The Mongoose models live under `src/modules`, grouped by business domain. The ex
 
 ## Notes
 
-These files define persistence contracts only. Controllers, services, database connection setup, API validation, background workers, and migrations are separate implementation work; the current backend does not yet contain those layers or a configured server entrypoint.
+The model files define persistence contracts. The backend now has an Express app, auth routes, environment-backed configuration, and a MongoDB connection/startup path. Domain services for commerce workflows, broader API validation, background workers, and migrations remain separate implementation work.
 
 ## Authentication Endpoints
 
