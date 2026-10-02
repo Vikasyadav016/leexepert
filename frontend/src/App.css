@@ -371,3 +371,8 @@
   .checkout-progress span { gap: 4px; }
   .checkout-section-heading h2 { font-size: 22px; }
 }
+
+.back-button { display: inline-flex; align-items: center; gap: 9px; margin: 13px clamp(20px, 5.3vw, 84px) 0; padding: 5px 0; border: 0; background: transparent; color: var(--muted); font: 500 10px var(--sans); transition: color .2s ease; }
+.back-button:hover { color: var(--terracotta); }
+.back-button span { color: var(--forest); font-size: 16px; }
+@media (max-width: 560px) { .back-button { margin: 11px 19px 0; } }
