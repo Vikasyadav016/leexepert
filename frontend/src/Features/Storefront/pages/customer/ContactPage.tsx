@@ -1,4 +1,5 @@
 import type { FormEvent } from "react";
+import "./ContactPage.css";
 
 type ContactPageProps = {
   onSubmit: (event: FormEvent<HTMLFormElement>, message: string) => void;

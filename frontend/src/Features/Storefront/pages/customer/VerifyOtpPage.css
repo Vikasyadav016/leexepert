@@ -1,0 +1,4 @@
+.otp-page { padding-top: 3px; }
+.otp-code-input { height: 66px !important; padding: 0 14px !important; border-color: #cfd5ca !important; font: 500 25px/1 var(--sans) !important; letter-spacing: 8px; text-align: center; }
+.otp-resend { justify-self: center; padding: 5px 0; border: 0; background: transparent; color: var(--muted); font: 10px var(--sans); }
+.otp-resend strong { color: var(--terracotta); font-weight: 600; }

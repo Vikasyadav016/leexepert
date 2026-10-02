@@ -1,4 +1,6 @@
 import { useEffect } from "react";
+import { createPortal } from "react-dom";
+import "./PremiumToast.css";
 
 export type ToastPlacement =
   | "top-left"
@@ -27,7 +29,7 @@ export function PremiumToast({ notice, onDismiss }: PremiumToastProps) {
     return () => window.clearTimeout(timeoutId);
   }, [notice.id, notice.duration, onDismiss]);
 
-  return (
+  return createPortal(
     <div
       className={`premium-toast premium-toast-${notice.placement}`}
       role="status"
@@ -45,6 +47,7 @@ export function PremiumToast({ notice, onDismiss }: PremiumToastProps) {
       >
         ×
       </button>
-    </div>
+    </div>,
+    document.body,
   );
 }

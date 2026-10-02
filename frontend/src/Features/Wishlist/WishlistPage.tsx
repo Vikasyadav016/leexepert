@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import type { Product, WishlistEvent } from '../Storefront/types'
 import { EmptyState, ProductGrid } from '../Storefront/components/ProductGrid'
+import './WishlistPage.css'
 
 type WishlistPageProps = {
   products: Product[]

@@ -1,4 +1,5 @@
 import type { Page } from '../types'
+import './SiteHeader.css'
 
 const mainNav: Page[] = ['Home', 'Shop', 'Collections']
 const utilityNav: Page[] = ['Account', 'Wishlist', 'Cart']

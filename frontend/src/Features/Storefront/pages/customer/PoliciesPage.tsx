@@ -1,3 +1,5 @@
+import "./PoliciesPage.css";
+
 export function PoliciesPage() {
   return (
     <section className="section-block content-page narrow-page policy-page">

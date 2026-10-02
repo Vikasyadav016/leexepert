@@ -1,5 +1,6 @@
 import type { KeyboardEvent } from 'react'
 import type { Product } from '../types'
+import './ProductGrid.css'
 
 type ProductGridProps = {
   items: Product[]

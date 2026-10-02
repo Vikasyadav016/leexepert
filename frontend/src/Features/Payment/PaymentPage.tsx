@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import type { Address, CartQuantities, PaymentMethod, Product } from '../Storefront/types'
+import './Checkout.css'
 
 type PaymentPageProps = {
   products: Product[]

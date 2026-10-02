@@ -1,5 +1,6 @@
 import type { Product, Page } from '../types'
 import { ProductGrid } from '../components/ProductGrid'
+import './CatalogPage.css'
 
 type CatalogPageProps = {
   page: 'Shop' | 'Collections' | 'Search'

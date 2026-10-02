@@ -1,4 +1,5 @@
 import type { DemoOrder, Page } from '../Storefront/types'
+import './OrdersPage.css'
 
 type OrdersPageProps = {
   orders: DemoOrder[]

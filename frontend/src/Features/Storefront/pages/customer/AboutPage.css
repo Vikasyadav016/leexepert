@@ -1,0 +1,6 @@
+.editorial-page { max-width: 980px; margin: 0 auto; }
+.editorial-page h1 { margin-bottom: 18px; }
+.editorial-lead { max-width: 640px; margin: 0 0 30px; color: var(--forest); font: 400 25px/1.4 var(--serif); }
+.editorial-image { width: 100%; aspect-ratio: 2.4 / 1; margin-bottom: 24px; background: url('https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=1500&q=85') center 47% / cover no-repeat; }
+.editorial-page .page-intro { max-width: 680px; margin: 0 0 22px; }
+@media (max-width: 560px) { .editorial-image { aspect-ratio: 1.2 / 1; } }

@@ -1,5 +1,6 @@
 import type { FormEvent } from 'react'
 import type { Address, CartQuantities, Product } from '../Storefront/types'
+import './Checkout.css'
 
 type CheckoutDetails = { email: string; address: Address }
 

@@ -1,0 +1,25 @@
+.order-history-list { display: grid; gap: 16px; }
+.history-order { border: 1px solid var(--line); background: rgba(255,255,255,.34); }
+.history-order-top { display: flex; justify-content: space-between; gap: 16px; align-items: center; padding: 15px 18px; border-bottom: 1px solid var(--line); background: rgba(226,231,220,.34); }
+.history-order-top > div { display: grid; gap: 5px; }
+.order-overline { color: var(--forest); font-size: 9px; font-weight: 600; letter-spacing: 1px; }
+.history-order-top time { color: var(--muted); font-size: 10px; }
+.order-status { padding: 6px 9px; border: 1px solid #b8c7b8; color: var(--forest); font-size: 9px; white-space: nowrap; }
+.history-order-body { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(190px, .65fr); gap: 25px; padding: 17px 18px; }
+.history-order-lines { display: grid; align-content: start; }
+.history-order-line { display: grid; grid-template-columns: 51px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 7px 0; }
+.history-order-line img { width: 51px; height: 64px; object-fit: cover; background: var(--sage); }
+.history-order-line div { display: grid; gap: 5px; }
+.history-order-line strong { color: var(--forest); font: 400 16px var(--serif); }
+.history-order-line div span, .history-order-line > span { color: var(--muted); font-size: 9px; }
+.history-order-summary { display: grid; align-content: start; gap: 9px; padding-left: 20px; border-left: 1px solid var(--line); color: var(--muted); font-size: 9px; }
+.history-order-summary > div { display: flex; justify-content: space-between; gap: 9px; margin: 4px 0; padding-top: 11px; border-top: 1px solid var(--line); color: var(--forest); font-size: 11px; }
+.history-order-summary .text-link { justify-self: start; font-size: 10px; }
+@media (max-width: 700px) { .history-order-body { grid-template-columns: 1fr; gap: 14px; } .history-order-summary { grid-template-columns: 1fr 1fr; padding: 13px 0 0; border-top: 1px solid var(--line); border-left: 0; } .history-order-summary > div { grid-column: 1 / -1; } }
+@media (max-width: 480px) {
+  .history-order-top { padding: 13px; }
+  .history-order-body { padding: 12px; }
+  .history-order-line { grid-template-columns: 44px minmax(0, 1fr) auto; gap: 9px; }
+  .history-order-line img { width: 44px; height: 56px; }
+  .history-order-line strong { font-size: 14px; }
+}

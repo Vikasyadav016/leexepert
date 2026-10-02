@@ -1,0 +1,21 @@
+.history-intro { max-width: 520px; margin: 0 0 31px; color: var(--muted); font-size: 13px; line-height: 1.7; }
+.history-tabs { display: flex; gap: 28px; margin: 27px 0 25px; border-bottom: 1px solid var(--line); }
+.history-tabs button { position: relative; display: inline-flex; align-items: center; gap: 8px; padding: 0 0 13px; border: 0; background: transparent; color: var(--muted); font: 500 11px var(--sans); }
+.history-tabs button.selected { color: var(--forest); }
+.history-tabs button.selected::after { position: absolute; right: 0; bottom: -1px; left: 0; height: 2px; background: var(--terracotta); content: ''; }
+.history-tabs button span { color: var(--terracotta); font-size: 10px; }
+.activity-list { border-top: 1px solid var(--line); }
+.activity-row { display: grid; grid-template-columns: 58px minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 13px 0; border-bottom: 1px solid var(--line); }
+.activity-row img { width: 58px; height: 70px; object-fit: cover; background: var(--sage); }
+.activity-row > div { display: grid; gap: 5px; }
+.activity-row strong { color: var(--forest); font: 400 17px var(--serif); }
+.activity-row span, .activity-row time { color: var(--muted); font-size: 10px; }
+.activity-row time { white-space: nowrap; }
+.history-empty { padding: 25px 0; color: var(--muted); font-size: 12px; }
+@media (max-width: 480px) {
+  .history-tabs { gap: 19px; }
+  .history-tabs button { font-size: 10px; }
+  .activity-row { grid-template-columns: 48px minmax(0, 1fr); gap: 10px; }
+  .activity-row img { width: 48px; height: 60px; }
+  .activity-row time { grid-column: 2; }
+}

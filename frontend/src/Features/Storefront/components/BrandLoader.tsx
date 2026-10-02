@@ -1,3 +1,6 @@
+import { createPortal } from "react-dom";
+import "./BrandLoader.css";
+
 type BrandLoaderProps = {
   fullScreen?: boolean;
   brandName?: string;
@@ -7,7 +10,7 @@ export function BrandLoader({
   fullScreen = true,
   brandName = "LEEX",
 }: BrandLoaderProps) {
-  return (
+  const loader = (
     <div
       className={`brand-loader${fullScreen ? " brand-loader-fullscreen" : ""}`}
       role="status"
@@ -19,4 +22,6 @@ export function BrandLoader({
       <span className="brand-loader-label">Please wait</span>
     </div>
   );
+
+  return fullScreen ? createPortal(loader, document.body) : loader;
 }

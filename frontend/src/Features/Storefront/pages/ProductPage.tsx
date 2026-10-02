@@ -1,4 +1,5 @@
 import type { Product } from '../types'
+import './ProductPage.css'
 
 type ProductPageProps = {
   product: Product

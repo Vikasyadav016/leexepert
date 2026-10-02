@@ -1,5 +1,6 @@
 import type { Product } from '../types'
 import { ProductGrid } from '../components/ProductGrid'
+import './HomePage.css'
 
 type HomePageProps = {
   products: Product[]

@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom'
+import './BackButton.css'
 
 function fallbackPath(pathname: string): string {
   if (pathname.startsWith('/products/')) return '/shop'

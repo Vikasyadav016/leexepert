@@ -1,5 +1,6 @@
 import type { CartQuantities, Product } from '../Storefront/types'
 import { EmptyState } from '../Storefront/components/ProductGrid'
+import './CartPage.css'
 
 type CartPageProps = {
   products: Product[]

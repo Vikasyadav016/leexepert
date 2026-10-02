@@ -1,0 +1,6 @@
+.policy-page details { border-top: 1px solid var(--line); }
+.policy-page details:last-child { border-bottom: 1px solid var(--line); }
+.policy-page summary { padding: 17px 2px; color: var(--forest); font: 400 20px var(--serif); cursor: pointer; list-style: none; }
+.policy-page summary::after { content: '+'; float: right; color: var(--terracotta); font: 400 16px var(--sans); }
+.policy-page details[open] summary::after { content: '−'; }
+.policy-page details p { max-width: 620px; margin: 0 0 19px; color: var(--muted); font-size: 12px; line-height: 1.8; }

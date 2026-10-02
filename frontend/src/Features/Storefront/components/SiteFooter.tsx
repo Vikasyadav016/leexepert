@@ -1,5 +1,6 @@
 import type { FormEvent } from 'react'
 import type { Page } from '../types'
+import './SiteFooter.css'
 
 type SiteFooterProps = {
   onNavigate: (page: Page) => void

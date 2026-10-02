@@ -6,7 +6,7 @@ import { SiteHeader } from '../components/SiteHeader'
 import { useStorefront } from '../context/StorefrontContext'
 import { pageForPath, pagePaths } from '../navigation'
 import type { Page } from '../types'
-import '../../../App.css'
+import '../Storefront.css'
 
 export function LandingPage() {
   const location = useLocation()

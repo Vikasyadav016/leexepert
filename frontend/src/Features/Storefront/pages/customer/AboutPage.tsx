@@ -1,3 +1,5 @@
+import "./AboutPage.css";
+
 type AboutPageProps = {
   onShop: () => void;
 };
