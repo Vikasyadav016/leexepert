@@ -10,6 +10,38 @@ function readString(value: unknown): string | undefined {
   return typeof value === "string" ? value.trim() : undefined;
 }
 
+function readRefreshToken(req: Request): string | undefined {
+  const cookieHeader = req.headers.cookie;
+  if (!cookieHeader) return undefined;
+  const prefix = `${authConfig.refreshCookieName}=`;
+  const entry = cookieHeader.split(";").map((cookie) => cookie.trim()).find((cookie) => cookie.startsWith(prefix));
+  if (!entry) return undefined;
+  try {
+    return decodeURIComponent(entry.slice(prefix.length));
+  } catch {
+    return undefined;
+  }
+}
+
+function setRefreshCookie(res: Response, token: string) {
+  res.cookie(authConfig.refreshCookieName, token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    path: authConfig.refreshCookiePath,
+    maxAge: authConfig.refreshTokenTtlMs,
+  });
+}
+
+function clearRefreshCookie(res: Response) {
+  res.clearCookie(authConfig.refreshCookieName, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    path: authConfig.refreshCookiePath,
+  });
+}
+
 function duplicateKeyError(error: unknown): boolean {
   return (
     typeof error === "object" &&
@@ -23,7 +55,7 @@ function publicUser(user: {
   id: string;
   firstName: string;
   lastName: string;
-  email: string;
+  email?: string;
   role: string;
   status: string;
 }) {
@@ -205,13 +237,7 @@ export async function signIn(req: Request, res: Response) {
     },
   );
 
-  res.cookie(authConfig.refreshCookieName, refreshToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-    path: authConfig.refreshCookiePath,
-    maxAge: authConfig.refreshTokenTtlMs,
-  });
+  setRefreshCookie(res, refreshToken);
 
   return res.status(200).json({
     accessToken,
@@ -219,4 +245,68 @@ export async function signIn(req: Request, res: Response) {
     expiresIn: authConfig.accessTokenTtlSeconds,
     user: publicUser(user),
   });
+}
+
+export async function refreshSession(req: Request, res: Response) {
+  const refreshToken = readRefreshToken(req);
+  if (!refreshToken) return res.status(401).json({ error: "A refresh session is required." });
+
+  const secret = getAccessTokenSecret();
+  if (!secret) return res.status(503).json({ error: "Authentication is not configured." });
+
+  const refreshTokenHash = createHash("sha256").update(refreshToken).digest("hex");
+  const session = await AuthSession.findOne({ refreshTokenHash, revokedAt: null, expiresAt: { $gt: new Date() } }).select("+refreshTokenHash");
+  if (!session) {
+    clearRefreshCookie(res);
+    return res.status(401).json({ error: "The refresh session is invalid or expired." });
+  }
+
+  const user = await User.findById(session.userId);
+  if (!user || user.status !== "active") {
+    session.revokedAt = new Date();
+    session.revokeReason = "security";
+    await session.save();
+    clearRefreshCookie(res);
+    return res.status(401).json({ error: "The account is unavailable." });
+  }
+
+  const accessToken = jwt.sign({ role: user.role }, secret, {
+    subject: user.id,
+    issuer: "leex-api",
+    audience: "leex-web",
+    expiresIn: authConfig.accessTokenTtlSeconds,
+  });
+  const nextRefreshToken = randomBytes(48).toString("base64url");
+  session.refreshTokenHash = createHash("sha256").update(nextRefreshToken).digest("hex");
+  session.expiresAt = new Date(Date.now() + authConfig.refreshTokenTtlMs);
+  session.lastUsedAt = new Date();
+  await session.save();
+  setRefreshCookie(res, nextRefreshToken);
+
+  return res.status(200).json({
+    accessToken,
+    tokenType: "Bearer",
+    expiresIn: authConfig.accessTokenTtlSeconds,
+    user: publicUser(user),
+  });
+}
+
+export async function signOut(req: Request, res: Response) {
+  const refreshToken = readRefreshToken(req);
+  if (refreshToken) {
+    const refreshTokenHash = createHash("sha256").update(refreshToken).digest("hex");
+    await AuthSession.updateOne(
+      { refreshTokenHash, revokedAt: null },
+      { $set: { revokedAt: new Date(), revokeReason: "logout" } },
+    );
+  }
+  clearRefreshCookie(res);
+  return res.status(204).end();
+}
+
+export async function currentUser(req: Request, res: Response) {
+  if (!req.auth) return res.status(401).json({ error: "Authentication is required." });
+  const user = await User.findById(req.auth.userId);
+  if (!user || user.status !== "active") return res.status(401).json({ error: "The account is unavailable." });
+  return res.status(200).json({ user: publicUser(user) });
 }

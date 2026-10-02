@@ -22,7 +22,7 @@ export class ApiError extends Error {
   }
 }
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "") ?? "";
+const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL?.trim() || "http://localhost:5000").replace(/\/$/, "");
 
 function resolveUrl(url: string): string {
   if (/^https?:\/\//i.test(url) || !apiBaseUrl) return url;
@@ -57,6 +57,7 @@ export async function apiRequest<TResponse, TBody = unknown>(
   const response = await fetch(resolveUrl(url), {
     method: options.method,
     headers,
+    credentials: "include",
     body: options.body === undefined
       ? undefined
       : isFormData
@@ -67,10 +68,13 @@ export async function apiRequest<TResponse, TBody = unknown>(
   const data = await readResponse(response);
 
   if (!response.ok) {
-    const serverMessage =
-      typeof data === "object" && data !== null && "message" in data
-        ? String(data.message)
-        : response.statusText || "Request failed";
+    const serverMessage = typeof data === "object" && data !== null
+      ? "error" in data
+        ? String(data.error)
+        : "message" in data
+          ? String(data.message)
+          : response.statusText || "Request failed"
+      : response.statusText || "Request failed";
     throw new ApiError(serverMessage, response.status, response.url, data);
   }
 

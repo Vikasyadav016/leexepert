@@ -8,6 +8,7 @@ const productSchema = new Schema({
   shortDescription: { type: String, trim: true, maxlength: 500 },
   description: { type: String, trim: true, maxlength: 20000, required: true },
   brand: { type: String, trim: true, maxlength: 120 },
+  color: { type: String, trim: true, maxlength: 80, default: 'Natural' },
   categoryId: { type: Types.ObjectId, ref: 'Category', required: true, index: true },
   subcategoryId: { type: Types.ObjectId, ref: 'Category', default: null },
   productType: { type: String, enum: ['physical', 'digital', 'service'], default: 'physical', required: true },

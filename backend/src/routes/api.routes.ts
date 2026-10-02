@@ -1,16 +1,17 @@
 import { Router } from 'express'
 import { authRouter } from '../modules/auth/auth.routes'
+import { productRouter } from '../modules/products/product.routes'
 import { logRouter } from '../modules/logs/log.routes'
 import { createModulePlaceholderRouter } from './module-placeholder.routes'
 
 const apiRouter = Router()
 
 apiRouter.use('/auth', authRouter)
+apiRouter.use('/products', productRouter)
 apiRouter.use('/logs', logRouter)
 
 const placeholderModules = [
   'users',
-  'products',
   'categories',
   'inventory',
   'cart',
