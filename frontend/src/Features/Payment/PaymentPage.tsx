@@ -23,7 +23,7 @@ export function PaymentPage({ products, quantities, subtotal, address, paymentMe
   return (
     <section className="section-block content-page checkout-page">
       <p className="eyebrow">{paymentText.eyebrow}</p><h1>{paymentText.title}</h1>
-      <div className="checkout-progress" aria-label="Checkout progress"><span className="complete">01 <b>{paymentText.bag}</b></span><i /><span className="complete">02 <b>{paymentText.delivery}</b></span><i /><span className="current">03 <b>{paymentText.payment}</b></span></div>
+      <div className="checkout-progress" aria-label={paymentText.progressLabel}><span className="complete">01 <b>{paymentText.bag}</b></span><i /><span className="complete">02 <b>{paymentText.delivery}</b></span><i /><span className="current">03 <b>{paymentText.payment}</b></span></div>
       <div className="checkout-layout">
         <div className="checkout-form">
           <section className="checkout-section"><div className="checkout-section-heading"><span>02</span><h2>{paymentText.deliveryAddress}</h2><Link className="text-link" to="/checkout/address">{paymentText.edit}</Link></div><address className="delivery-address">{address.firstName} {address.lastName}<br />{address.addressLine1}{address.addressLine2 && <><br />{address.addressLine2}</>}<br />{address.city}, {address.region} {address.postalCode}<br />{address.country}</address></section>

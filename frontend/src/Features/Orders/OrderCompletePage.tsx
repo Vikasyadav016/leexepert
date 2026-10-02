@@ -28,7 +28,7 @@ export function OrderCompletePage({ order, onRate, onNavigate }: OrderCompletePa
         {order.lines.map((line) => (
           <article className="order-complete-line" key={line.productId}>
             <img src={line.image} alt={line.name} />
-            <div className="order-complete-item-copy"><strong>{line.name}</strong><span>{line.color} · Qty {line.quantity}</span><span className="order-complete-rate-prompt">{line.rating ? orderCompleteText.rated : orderCompleteText.ratePrompt}</span><ProductRating value={line.rating} onChange={(rating) => onRate(line.productId, rating)} /></div>
+            <div className="order-complete-item-copy"><strong>{line.name}</strong><span>{line.color} · {orderCompleteText.quantity} {line.quantity}</span><span className="order-complete-rate-prompt">{line.rating ? orderCompleteText.rated : orderCompleteText.ratePrompt}</span><ProductRating value={line.rating} onChange={(rating) => onRate(line.productId, rating)} /></div>
             <span className="order-complete-price">{currency(line.unitPrice * line.quantity)}</span>
           </article>
         ))}

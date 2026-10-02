@@ -5,6 +5,7 @@
   "orderNumber": "ORDER {orderNumber}",
   "demoNote": "This was a demo order. No payment was processed.",
   "itemsHeading": "Your order",
+  "quantity": "Qty",
   "ratePrompt": "How does it feel?",
   "rated": "Thank you for your rating.",
   "viewOrders": "View your orders",

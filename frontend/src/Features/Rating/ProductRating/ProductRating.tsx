@@ -9,7 +9,7 @@ type ProductRatingProps = {
 
 export function ProductRating({ value = 0, onChange, label }: ProductRatingProps) {
   return (
-    <div className="product-rating" role="group" aria-label={label ?? "Product rating"}>
+    <div className="product-rating" role="group" aria-label={label ?? ratingText.groupLabel}>
       {[1, 2, 3, 4, 5].map((rating) => (
         <button
           key={rating}

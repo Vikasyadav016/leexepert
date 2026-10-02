@@ -1,6 +1,7 @@
 {
   "eyebrow": "A record of the good things",
   "title": "Order history",
+  "orderPrefix": "ORDER",
   "order": "order",
   "orders": "orders",
   "intro": "Your past purchases, all in one place. Demo orders are saved in this browser.",

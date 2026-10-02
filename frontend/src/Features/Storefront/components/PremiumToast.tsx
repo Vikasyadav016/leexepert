@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
-import toastText from "../../TextJson/Shared/PremiumToast.json";
+import toastText from "../../../TextJson/Shared/PremiumToast.json";
 import "./PremiumToast.css";
 
 export type ToastPlacement =

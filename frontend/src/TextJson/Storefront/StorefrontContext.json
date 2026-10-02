@@ -1,3 +1,5 @@
 {
-  "productAdded": "{name} added to your bag"
+  "productAdded": "{name} added to your bag",
+  "orderStatus": "Confirmed",
+  "paymentStatus": "Paid · simulated"
 }

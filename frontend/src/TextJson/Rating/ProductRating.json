@@ -1,4 +1,5 @@
 {
   "ariaLabel": "Rate {rating} out of 5 stars",
-  "displayLabel": "{rating} out of 5"
+  "displayLabel": "{rating} out of 5",
+  "groupLabel": "Product rating"
 }

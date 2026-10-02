@@ -8,8 +8,6 @@
   "cart": {
     "quickAdd": "Quick add +",
     "addMore": "Add more",
-    "remove": "Remove",
-    "addToWishlist": "Add to wishlist",
-    "removeFromWishlist": "Remove from wishlist"
+    "remove": "Remove"
   }
 }

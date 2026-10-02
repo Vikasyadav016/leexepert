@@ -4,6 +4,7 @@
   "bag": "Bag",
   "delivery": "Delivery",
   "payment": "Payment",
+  "progressLabel": "Checkout progress",
   "contact": "Contact",
   "addressSection": "Where to send it",
   "email": "Email address",

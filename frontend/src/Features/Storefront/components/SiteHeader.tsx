@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { Page } from '../types'
 import { UserAvatar } from './UserAvatar'
 import headerText from '../../../TextJson/Storefront/SiteHeader.json'
+import brandText from '../../../TextJson/Brand.json'
 import './SiteHeader.css'
 
 const mainNav: Page[] = ['Home', 'Shop', 'Collections']
@@ -30,7 +31,7 @@ export function SiteHeader({ page, cartCount, wishlistCount, user, onNavigate }:
     <>
       <div className="announcement">{headerText.announcement}</div>
       <header className="site-header">
-        <button className="wordmark" onClick={() => navigateTo('Home')} aria-label={headerText.homeLabel}>LEEX<span>®</span></button>
+        <button className="wordmark" onClick={() => navigateTo('Home')} aria-label={headerText.homeLabel}>{brandText.name}<span>®</span></button>
         <button
           className="mobile-profile-trigger"
           onClick={() => navigateTo(user ? 'Profile' : 'Account')}

@@ -55,7 +55,7 @@ export function AccountPage({ onNotice, onAuthenticated }: AccountPageProps) {
     <section className="account-access-page">
       <aside className="account-brand-panel">
         <div className="account-brand-topline">
-          <span className="account-brand-mark" aria-hidden="true">L</span>
+          <span className="account-brand-mark" aria-hidden="true">{brandText.name.slice(0, 1)}</span>
           <span>{brandText.name} / STUDIO</span>
         </div>
         <div className="account-brand-copy">
@@ -72,7 +72,7 @@ export function AccountPage({ onNotice, onAuthenticated }: AccountPageProps) {
       <div className="account-form-panel">
         <div className="account-panel-heading">
           <p className="account-kicker">{accountText.accountLabel.replace("Leex", brandText.name)}</p>
-          <div className="account-mode-switch" role="group" aria-label="Account access mode">
+          <div className="account-mode-switch" role="group" aria-label={accountText.accountModeLabel}>
             <button
               type="button"
               className={!showSignup ? "selected" : ""}
@@ -165,7 +165,7 @@ export function AccountPage({ onNotice, onAuthenticated }: AccountPageProps) {
             </div>
           </div>
         </div>
-        <p className="account-support">{accountText.supportLead} <a href="mailto:hello@leex.com">{accountText.supportLink}</a></p>
+        <p className="account-support">{accountText.supportLead} <a href={`mailto:${brandText.supportEmail}`}>{accountText.supportLink}</a></p>
       </div>
     </section>
   );

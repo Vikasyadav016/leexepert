@@ -1,5 +1,6 @@
 import { createPortal } from "react-dom";
-import brandText from "../../TextJson/Brand.json";
+import brandText from "../../../TextJson/Brand.json";
+import loaderText from "../../../TextJson/Shared/BrandLoader.json";
 import "./BrandLoader.css";
 
 type BrandLoaderProps = {
@@ -11,7 +12,7 @@ type BrandLoaderProps = {
 export function BrandLoader({
   fullScreen = true,
   brandName = brandText.name,
-  label = brandText.loadingLabel,
+  label = loaderText.label,
 }: BrandLoaderProps) {
   const content = (
     <>

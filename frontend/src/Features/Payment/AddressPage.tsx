@@ -37,7 +37,7 @@ export function AddressPage({ initialDetails, products, quantities, subtotal, on
   return (
     <section className="section-block content-page checkout-page">
       <p className="eyebrow">{addressText.eyebrow}</p><h1>{addressText.title}</h1>
-      <div className="checkout-progress" aria-label="Checkout progress"><span className="complete">01 <b>{addressText.bag}</b></span><i /><span className="current">02 <b>{addressText.delivery}</b></span><i /><span>03 <b>{addressText.payment}</b></span></div>
+      <div className="checkout-progress" aria-label={addressText.progressLabel}><span className="complete">01 <b>{addressText.bag}</b></span><i /><span className="current">02 <b>{addressText.delivery}</b></span><i /><span>03 <b>{addressText.payment}</b></span></div>
       <div className="checkout-layout">
         <form className="checkout-form" onSubmit={submitAddress}>
           <section className="checkout-section"><div className="checkout-section-heading"><span>01</span><h2>{addressText.contact}</h2></div><input name="email" type="email" defaultValue={initialDetails.email} required placeholder={addressText.email} autoComplete="email" /></section>

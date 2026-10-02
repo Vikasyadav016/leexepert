@@ -1,6 +1,7 @@
 import type { FormEvent } from "react";
 import "./ContactPage.css";
 import contactText from "../../../../TextJson/Customer/ContactPage.json";
+import brandText from "../../../../TextJson/Brand.json";
 
 type ContactPageProps = {
   onSubmit: (event: FormEvent<HTMLFormElement>, message: string) => void;
@@ -29,7 +30,7 @@ export function ContactPage({ onSubmit }: ContactPageProps) {
         <button className="button button-dark full-button">{contactText.submit}</button>
       </form>
       <p className="contact-email">
-        {contactText.emailLead} <a href="mailto:hello@leex.com">hello@leex.com</a>
+        {contactText.emailLead} <a href={`mailto:${brandText.supportEmail}`}>{brandText.supportEmail}</a>
       </p>
     </section>
   );

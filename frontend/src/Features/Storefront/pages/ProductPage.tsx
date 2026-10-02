@@ -20,7 +20,7 @@ export function ProductPage({ product, isWishlisted, onAdd, onBuyNow, onToggleWi
         <p className="detail-price">${product.price}.00</p>
         <p>{product.description}</p>
         <div className="product-meta"><span>{productText.color}</span><strong>{product.color}</strong></div>
-        <div className="swatches"><button className="swatch selected" aria-label={`Select ${product.color}`} /><button className="swatch swatch-light" aria-label={`Select ${productText.naturalLinen}`} /><button className="swatch swatch-rust" aria-label={`Select ${productText.terracotta}`} /></div>
+        <div className="swatches"><button className="swatch selected" aria-label={productText.selectColor.replace('{color}', product.color)} /><button className="swatch swatch-light" aria-label={productText.selectColor.replace('{color}', productText.naturalLinen)} /><button className="swatch swatch-rust" aria-label={productText.selectColor.replace('{color}', productText.terracotta)} /></div>
         <label className="size-label">{productText.selectSize}<select defaultValue=""><option value="" disabled>{productText.chooseSize}</option>{productText.sizes.map((size) => <option key={size}>{size}</option>)}</select></label>
         <button className="button button-dark full-button" onClick={() => onAdd(product)}>{productText.addToBag} · ${product.price}.00</button>
         <button className="button button-outline full-button buy-now-button" onClick={() => onBuyNow(product)}>{productText.buyNow} <span>↗</span></button>
