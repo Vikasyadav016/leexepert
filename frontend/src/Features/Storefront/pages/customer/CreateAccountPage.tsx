@@ -18,7 +18,7 @@ export function CreateAccountPage({
         onSubmit={(event) =>
           onSubmit(
             event,
-            "Account creation is not connected yet. Your details have not been saved.",
+            "Demo sign-up complete. Account creation is not connected yet, so no details were saved.",
           )
         }
       >

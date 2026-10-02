@@ -1,33 +1,50 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+import { BrandLoader } from "../../components/BrandLoader";
 import { CreateAccountPage } from "./CreateAccountPage";
 
 type AccountPageProps = {
-  onSubmit: (event: FormEvent<HTMLFormElement>, message: string) => void;
+  onNotice: (message: string, options?: { placement?: "top-center" }) => void;
 };
 
-export function AccountPage({ onSubmit }: AccountPageProps) {
+export function AccountPage({ onNotice }: AccountPageProps) {
   const [showSignup, setShowSignup] = useState(false);
+  const [pendingForm, setPendingForm] = useState<"login" | "signup" | null>(null);
+  const timeoutRef = useRef<number | null>(null);
+
+  useEffect(() => () => {
+    if (timeoutRef.current !== null) window.clearTimeout(timeoutRef.current);
+  }, []);
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>, message: string, form: "login" | "signup") {
+    event.preventDefault();
+    if (pendingForm) return;
+
+    setPendingForm(form);
+    timeoutRef.current = window.setTimeout(() => {
+      setPendingForm(null);
+      onNotice(message, { placement: "top-center" });
+    }, 3000);
+  }
 
   return (
     <section className="section-block content-page account-access-page">
+      {pendingForm && <BrandLoader fullScreen />}
       <div className={`account-flip${showSignup ? " is-signup" : ""}`}>
         <div className="account-flip-inner">
           <div
             className="account-flip-face account-flip-login"
             aria-hidden={showSignup}
           >
-            <fieldset
-              className="account-face-fieldset"
-              disabled={showSignup}
-            >
+            <fieldset className="account-face-fieldset" disabled={showSignup || pendingForm !== null}>
               <p className="eyebrow">Welcome back</p>
               <h1>Your account</h1>
               <form
                 className="simple-form account-form"
                 onSubmit={(event) =>
-                  onSubmit(
+                  handleSubmit(
                     event,
-                    "Sign-in is not connected yet. Your account service will be available soon.",
+                    "Demo sign-in complete. Authentication is not connected yet.",
+                    "login",
                   )
                 }
               >
@@ -66,10 +83,10 @@ export function AccountPage({ onSubmit }: AccountPageProps) {
           >
             <fieldset
               className="account-face-fieldset"
-              disabled={!showSignup}
+              disabled={!showSignup || pendingForm !== null}
             >
               <CreateAccountPage
-                onSubmit={onSubmit}
+                onSubmit={(event, message) => handleSubmit(event, message, "signup")}
                 onSignIn={() => setShowSignup(false)}
               />
             </fieldset>

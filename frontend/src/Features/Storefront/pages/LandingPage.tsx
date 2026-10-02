@@ -1,5 +1,6 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { BackButton } from '../components/BackButton'
+import { PremiumToast } from '../components/PremiumToast'
 import { SiteFooter } from '../components/SiteFooter'
 import { SiteHeader } from '../components/SiteHeader'
 import { useStorefront } from '../context/StorefrontContext'
@@ -19,7 +20,7 @@ export function LandingPage() {
       <SiteHeader page={page} cartCount={store.cartCount} wishlistCount={store.wishlistIds.length} onNavigate={onNavigate} />
       <BackButton />
       <main>
-        {store.notice && <div className="notice" role="status">{store.notice}<button onClick={store.clearNotice} aria-label="Dismiss">×</button></div>}
+        {store.notice && <PremiumToast notice={store.notice} onDismiss={store.clearNotice} />}
         <Outlet />
       </main>
       <SiteFooter onNavigate={onNavigate} onSubmit={(event, message) => { event.preventDefault(); store.notify(message) }} />

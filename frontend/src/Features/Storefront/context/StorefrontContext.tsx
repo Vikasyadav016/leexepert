@@ -4,6 +4,7 @@ import orderData from '../../DummyDataTest/orders.json'
 import paymentData from '../../DummyDataTest/payment-methods.json'
 import wishlistData from '../../DummyDataTest/wishlist.json'
 import wishlistHistoryData from '../../DummyDataTest/wishlist-history.json'
+import type { ToastNotice, ToastPlacement } from '../components/PremiumToast'
 import { products } from '../data/products'
 import type { Address, CartQuantities, CheckoutSubmission, DemoOrder, PaymentMethod, Product, WishlistEvent, WishlistItem } from '../types'
 
@@ -21,9 +22,9 @@ type StorefrontContextValue = {
   orders: DemoOrder[]
   query: string
   setQuery: (query: string) => void
-  notice: string
+  notice: ToastNotice | null
   clearNotice: () => void
-  notify: (message: string) => void
+  notify: (message: string, options?: { placement?: ToastPlacement; duration?: number }) => void
   addToCart: (product: Product, amount?: number) => void
   buyNow: (product: Product) => void
   setQuantity: (productId: number, quantity: number) => void
@@ -63,7 +64,7 @@ export function StorefrontProvider({ children }: { children: ReactNode }) {
   const [orders, setOrders] = useState<DemoOrder[]>(() => readDemoState('leex-demo-orders', demoOrders))
   const [checkoutDetails, setCheckoutDetails] = useState<CheckoutDetails>(() => readDemoState('leex-demo-checkout', initialCheckoutDetails))
   const [query, setQuery] = useState('')
-  const [notice, setNotice] = useState('')
+  const [notice, setNotice] = useState<ToastNotice | null>(null)
 
   const wishlistIds = wishlist.items.map((item) => item.productId)
   const cartCount = Object.values(cart).reduce((sum, count) => sum + count, 0)
@@ -77,12 +78,12 @@ export function StorefrontProvider({ children }: { children: ReactNode }) {
 
   function addToCart(product: Product, amount = 1) {
     setCart((current) => ({ ...current, [product.id]: (current[product.id] ?? 0) + amount }))
-    setNotice(`${product.name} added to your bag`)
+    notify(`${product.name} added to your bag`)
   }
 
   function buyNow(product: Product) {
     setCart((current) => ({ ...current, [product.id]: Math.max(current[product.id] ?? 0, 1) }))
-    setNotice('')
+    setNotice(null)
   }
 
   function setQuantity(productId: number, quantity: number) {
@@ -142,7 +143,16 @@ export function StorefrontProvider({ children }: { children: ReactNode }) {
 
     setOrders((current) => [order, ...current])
     setCart({})
-    setNotice(`Order ${orderNumber} placed. This was a simulated payment; no charge was made.`)
+    notify(`Order ${orderNumber} placed. This was a simulated payment; no charge was made.`)
+  }
+
+  function notify(message: string, options: { placement?: ToastPlacement; duration?: number } = {}) {
+    setNotice({
+      id: Date.now(),
+      message,
+      placement: options.placement ?? 'top-right',
+      duration: options.duration ?? 4200,
+    })
   }
 
   const value: StorefrontContextValue = {
@@ -157,8 +167,8 @@ export function StorefrontProvider({ children }: { children: ReactNode }) {
     query,
     setQuery,
     notice,
-    clearNotice: () => setNotice(''),
-    notify: setNotice,
+    clearNotice: () => setNotice(null),
+    notify,
     addToCart,
     buyNow,
     setQuantity,

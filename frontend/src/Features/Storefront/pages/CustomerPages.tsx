@@ -17,18 +17,20 @@ type CustomerPagesProps = {
     | "Contact"
     | "Policies"
   >;
+  onNotice: (message: string, options?: { placement?: "top-center" }) => void;
   onSubmit: (event: FormEvent<HTMLFormElement>, message: string) => void;
   onShop: () => void;
 };
 
 export function CustomerPages({
   page,
+  onNotice,
   onSubmit,
   onShop,
 }: CustomerPagesProps) {
   switch (page) {
     case "Account":
-      return <AccountPage onSubmit={onSubmit} />;
+      return <AccountPage onNotice={onNotice} />;
     case "Returns":
       return <ReturnsPage onSubmit={onSubmit} />;
     case "Track Order":
