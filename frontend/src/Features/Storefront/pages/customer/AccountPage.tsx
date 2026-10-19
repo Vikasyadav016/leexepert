@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { BrandLoader } from "../../components/BrandLoader";
 import type { AuthProfileInput } from "../../../../Services/AuthServices/AuthContext";
 import { AccountFieldIcon } from "./AccountFieldIcon";
@@ -23,22 +23,14 @@ export function AccountPage({ onNotice, onAuthenticated }: AccountPageProps) {
   const [loginPhone, setLoginPhone] = useState("");
   const [loginEmail, setLoginEmail] = useState("");
   const [pendingForm, setPendingForm] = useState<"login" | "signup" | null>(null);
-  const timeoutRef = useRef<number | null>(null);
-
-  useEffect(() => () => {
-    if (timeoutRef.current !== null) window.clearTimeout(timeoutRef.current);
-  }, []);
-
   function handleSubmit(event: FormEvent<HTMLFormElement>, message: string, form: "login" | "signup", profile: AuthProfileInput) {
     event.preventDefault();
     if (pendingForm) return;
 
     setPendingForm(form);
-    timeoutRef.current = window.setTimeout(() => {
-      setPendingForm(null);
-      onAuthenticated(profile);
-      onNotice(message, { placement: "top-center" });
-    }, 3000);
+    onAuthenticated(profile);
+    onNotice(message, { placement: "top-center" });
+    setPendingForm(null);
   }
 
   function requestOtp(event: FormEvent<HTMLFormElement>, destination: string, flow: OtpChallenge["flow"], profile: AuthProfileInput) {

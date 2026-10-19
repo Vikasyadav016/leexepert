@@ -27,6 +27,11 @@ export type Product = {
   description: string
 }
 
+export type ProductSelection = {
+  color: string
+  size: string
+}
+
 export type CartQuantities = Record<number, number>
 
 export type Address = {
@@ -77,6 +82,7 @@ export type OrderLine = {
   productId: number
   name: string
   color: string
+  size?: string
   image: string
   unitPrice: number
   quantity: number

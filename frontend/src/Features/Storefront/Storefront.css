@@ -9,6 +9,7 @@
 .text-link { display: inline-flex; align-items: center; gap: 8px; padding: 6px 0; border: 0; background: transparent; color: var(--ink); font: 500 12px/1.4 var(--sans); transition: color .2s ease; }
 .text-link:hover { color: var(--terracotta); }
 .section-block { padding: 78px clamp(22px, 6vw, 96px); }
+.back-button + main > .section-block { padding-top: clamp(28px, 3.5vw, 44px); }
 .content-page { min-height: 52vh; }
 .content-page h1 { margin: 0; color: var(--forest); font: 400 clamp(40px, 5vw, 60px)/.98 var(--serif); letter-spacing: 0; }
 .content-page > .eyebrow { margin-bottom: 14px; }
@@ -42,6 +43,7 @@
 
 @media (max-width: 560px) {
   .section-block { padding: 48px 19px; }
+  .back-button + main > .section-block { padding-top: 28px; }
   .content-page { min-height: 45vh; }
   .content-page h1 { font-size: 43px; }
 }

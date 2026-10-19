@@ -9,10 +9,11 @@
 .history-order-lines { display: grid; align-content: start; }
 .history-order-line { display: grid; grid-template-columns: 51px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 7px 0; }
 .history-order-line img { width: 51px; height: 64px; object-fit: cover; background: var(--sage); }
-.history-order-line div { display: grid; gap: 5px; }
+.history-order-line .history-order-product { display: grid; justify-items: start; gap: 5px; }
 .history-order-line strong { color: var(--forest); font: 400 16px var(--serif); }
-.history-order-line div span, .history-order-line > span { color: var(--muted); font-size: 9px; }
-.history-order-rating { display: flex; align-items: center; gap: 6px; margin-top: 2px; }
+.history-order-product > span, .history-order-line > span { color: var(--muted); font-size: 9px; }
+.history-order-rating { display: grid; justify-items: start; gap: 4px; margin-top: 4px; }
+.history-order-rating .rating-prompt { color: var(--ink); font-size: 9px; }
 .history-order-rating .rating-star { font-size: 13px; }
 .history-order-rating small { color: var(--muted); font-size: 8px; }
 .history-order-summary { display: grid; align-content: start; gap: 9px; padding-left: 20px; border-left: 1px solid var(--line); color: var(--muted); font-size: 9px; }

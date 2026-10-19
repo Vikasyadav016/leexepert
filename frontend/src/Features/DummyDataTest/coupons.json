@@ -1,0 +1,56 @@
+[
+  {
+    "code": "LINEN10",
+    "title": "A little linen love",
+    "description": "Take 10% off your order of $100 or more.",
+    "badge": "10% OFF",
+    "kind": "percent",
+    "amount": 10,
+    "minimumSubtotal": 100
+  },
+  {
+    "code": "WELCOME15",
+    "title": "A warm welcome",
+    "description": "Enjoy $15 off orders of $150 or more.",
+    "badge": "$15 OFF",
+    "kind": "fixed",
+    "amount": 15,
+    "minimumSubtotal": 150
+  },
+  {
+    "code": "SOFT20",
+    "title": "Softly considered",
+    "description": "Take 20% off when your order reaches $250.",
+    "badge": "20% OFF",
+    "kind": "percent",
+    "amount": 20,
+    "minimumSubtotal": 250
+  },
+  {
+    "code": "SHIPFREE",
+    "title": "A little extra ease",
+    "description": "Save $10 on orders of $120 or more.",
+    "badge": "$10 OFF",
+    "kind": "fixed",
+    "amount": 10,
+    "minimumSubtotal": 120
+  },
+  {
+    "code": "STUDIO25",
+    "title": "The studio edit",
+    "description": "Take 25% off a considered order over $300.",
+    "badge": "25% OFF",
+    "kind": "percent",
+    "amount": 25,
+    "minimumSubtotal": 300
+  },
+  {
+    "code": "NEXT20",
+    "title": "Your next favorite",
+    "description": "Enjoy $20 off orders of $200 or more.",
+    "badge": "$20 OFF",
+    "kind": "fixed",
+    "amount": 20,
+    "minimumSubtotal": 200
+  }
+]

@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { CartPage } from '../../Cart/CartPage'
 import { OrdersPage } from '../../Orders/OrdersPage'
@@ -19,7 +20,7 @@ import { pagePaths } from '../navigation'
 import { useStorefront } from '../context/StorefrontContext'
 import { useAuth } from '../../../Services/AuthServices/AuthContext'
 import { returnPathFromState } from '../../../Services/AuthServices/RouteGuards'
-import type { Page, Product } from '../types'
+import type { DemoOrder, Page, Product } from '../types'
 
 type CatalogPageName = Extract<Page, 'Shop' | 'Collections' | 'Search'>
 type CustomerPageName = Extract<Page, 'Account' | 'Returns' | 'Track Order' | 'About Brand' | 'Contact' | 'Policies'>
@@ -44,23 +45,23 @@ export function ProductRoute() {
   const product = products.find((item) => item.id === Number(productId))
   if (!product) return <Navigate to="/shop" replace />
 
-  function addAndOpenCart(item: Product) {
-    store.addToCart(item)
+  function addSelectedToCart(item: Product, selection: { color: string; size: string }) {
+    store.addToCart(item, 1, selection)
     navigate('/cart')
   }
 
-  function buyNow(item: Product) {
-    store.buyNow(item)
+  function buyNow(item: Product, selection: { color: string; size: string }) {
+    store.buyNow(item, selection)
     navigate('/checkout/address')
   }
 
-  return <ProductPage product={product} isWishlisted={store.wishlistIds.includes(product.id)} onAdd={addAndOpenCart} onBuyNow={buyNow} onToggleWishlist={store.toggleWishlist} />
+  return <ProductPage product={product} isWishlisted={store.wishlistIds.includes(product.id)} onAdd={addSelectedToCart} onBuyNow={buyNow} onToggleWishlist={store.toggleWishlist} />
 }
 
 export function CartRoute() {
   const store = useStorefront()
   const navigate = useNavigate()
-  return <CartPage products={products} quantities={store.cart} totals={store.orderTotals} selectedCoupon={store.selectedCoupon} onNavigate={(page) => navigate(pagePaths[page])} onSetQuantity={store.setQuantity} />
+  return <CartPage products={products} quantities={store.cart} selections={store.cartSelections} totals={store.orderTotals} selectedCoupon={store.selectedCoupon} onNavigate={(page) => navigate(pagePaths[page])} onSetQuantity={store.setQuantity} />
 }
 
 export function WishlistRoute() {
@@ -85,7 +86,7 @@ export function CheckoutPaymentRoute() {
   const store = useStorefront()
   const navigate = useNavigate()
   if (store.cartCount === 0) return <Navigate to="/cart" replace />
-  return <PaymentPage products={products} quantities={store.cart} subtotal={store.cartTotal} totals={store.orderTotals} address={store.checkoutDetails.address} paymentMethods={store.paymentMethods} coupons={store.coupons} selectedCoupon={store.selectedCoupon} onApplyCoupon={store.applyCoupon} onClearCoupon={store.clearCoupon} onPlaceOrder={(paymentMethodId) => { const order = store.placeOrder({ ...store.checkoutDetails, paymentMethodId }); if (order) navigate(`/order-complete/${order.orderNumber}`) }} />
+  return <PaymentPage products={products} quantities={store.cart} selections={store.cartSelections} subtotal={store.cartTotal} totals={store.orderTotals} address={store.checkoutDetails.address} email={store.checkoutDetails.email} paymentMethods={store.paymentMethods} coupons={store.coupons} selectedCoupon={store.selectedCoupon} onApplyCoupon={store.applyCoupon} onClearCoupon={store.clearCoupon} onPlaceOrder={(paymentMethodId) => { const order = store.placeOrder({ ...store.checkoutDetails, paymentMethodId }); if (order) navigate(`/order-complete/${order.orderNumber}`, { replace: true, state: { order, justPlaced: true } }) }} />
 }
 
 export function OrdersRoute() {
@@ -97,8 +98,15 @@ export function OrdersRoute() {
 export function OrderCompleteRoute() {
   const { orderNumber } = useParams()
   const navigate = useNavigate()
+  const location = useLocation()
   const store = useStorefront()
-  const order = store.orders.find((item) => item.orderNumber === orderNumber)
+  const confirmationState = location.state as { order?: DemoOrder; justPlaced?: boolean } | null
+  const order = confirmationState?.order ?? store.orders.find((item) => item.orderNumber === orderNumber)
+  useEffect(() => {
+    if (!confirmationState?.justPlaced || !order) return
+    store.clearCart()
+    navigate(location.pathname, { replace: true, state: { order } })
+  }, [confirmationState?.justPlaced, location.pathname, navigate, order, store.clearCart])
   if (!order) return <Navigate to="/orders" replace />
   return <OrderCompletePage order={order} onRate={(productId, rating) => store.rateOrderItem(order.id, productId, rating)} onNavigate={navigate} onTrack={() => navigate(`/orders/${order.orderNumber}/tracking`)} onDetails={() => navigate(`/orders/${order.orderNumber}`)} />
 }

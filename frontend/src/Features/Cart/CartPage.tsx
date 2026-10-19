@@ -1,4 +1,4 @@
-import type { CartQuantities, CheckoutTotals, CouponOffer, Product } from '../Storefront/types'
+import type { CartQuantities, CheckoutTotals, CouponOffer, Product, ProductSelection } from '../Storefront/types'
 import { EmptyState } from '../Storefront/components/ProductGrid'
 import cartText from '../../TextJson/Cart/CartPage.json'
 import './CartPage.css'
@@ -6,13 +6,14 @@ import './CartPage.css'
 type CartPageProps = {
   products: Product[]
   quantities: CartQuantities
+  selections: Record<number, ProductSelection>
   totals: CheckoutTotals
   selectedCoupon: CouponOffer | null
   onNavigate: (page: 'Shop' | 'Checkout' | 'Coupons') => void
   onSetQuantity: (productId: number, quantity: number) => void
 }
 
-export function CartPage({ products, quantities, totals, selectedCoupon, onNavigate, onSetQuantity }: CartPageProps) {
+export function CartPage({ products, quantities, selections, totals, selectedCoupon, onNavigate, onSetQuantity }: CartPageProps) {
   const cartProducts = products.filter((product) => quantities[product.id] > 0)
   const count = Object.values(quantities).reduce((sum, quantity) => sum + quantity, 0)
 
@@ -26,7 +27,7 @@ export function CartPage({ products, quantities, totals, selectedCoupon, onNavig
             {cartProducts.map((product) => (
               <div className="cart-line" key={product.id}>
                 <img src={product.image} alt={product.name} />
-                <div className="cart-product"><span className="cart-product-name">{product.name}</span><span>{product.color} · {product.category}</span><div className="quantity"><button aria-label={cartText.removeOne.replace('{name}', product.name)} onClick={() => onSetQuantity(product.id, quantities[product.id] - 1)}>−</button><span>{quantities[product.id]}</span><button aria-label={cartText.addOne.replace('{name}', product.name)} onClick={() => onSetQuantity(product.id, quantities[product.id] + 1)}>+</button></div></div>
+                <div className="cart-product"><span className="cart-product-name">{product.name}</span><span>{selections[product.id]?.color ?? product.color}{selections[product.id]?.size ? ` · Size ${selections[product.id].size}` : ''} · {product.category}</span><div className="quantity"><button aria-label={cartText.removeOne.replace('{name}', product.name)} onClick={() => onSetQuantity(product.id, quantities[product.id] - 1)}>−</button><span>{quantities[product.id]}</span><button aria-label={cartText.addOne.replace('{name}', product.name)} onClick={() => onSetQuantity(product.id, quantities[product.id] + 1)}>+</button></div></div>
                 <strong>${(product.price * quantities[product.id]).toFixed(2)}</strong>
               </div>
             ))}

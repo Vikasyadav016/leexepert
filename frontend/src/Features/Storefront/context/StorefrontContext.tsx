@@ -10,7 +10,7 @@ import { products } from '../data/products'
 import { coupons } from '../data/coupons'
 import { calculateCheckoutTotals } from '../data/checkoutTotals'
 import storeText from '../../../TextJson/Storefront/StorefrontContext.json'
-import type { Address, CartQuantities, CheckoutSubmission, CouponOffer, DemoOrder, PaymentMethod, Product, WishlistEvent, WishlistItem } from '../types'
+import type { Address, CartQuantities, CheckoutSubmission, CouponOffer, DemoOrder, PaymentMethod, Product, ProductSelection, WishlistEvent, WishlistItem } from '../types'
 
 export type WishlistState = { items: WishlistItem[]; events: WishlistEvent[] }
 type CheckoutDetails = { email: string; address: Address }
@@ -18,6 +18,7 @@ type CheckoutDetails = { email: string; address: Address }
 type StorefrontContextValue = {
   products: Product[]
   cart: CartQuantities
+  cartSelections: Record<number, ProductSelection>
   cartCount: number
   cartTotal: number
   orderTotals: ReturnType<typeof calculateCheckoutTotals>
@@ -34,8 +35,8 @@ type StorefrontContextValue = {
   notice: ToastNotice | null
   clearNotice: () => void
   notify: (message: string, options?: { placement?: ToastPlacement; duration?: number }) => void
-  addToCart: (product: Product, amount?: number) => void
-  buyNow: (product: Product) => void
+  addToCart: (product: Product, amount?: number, selection?: ProductSelection) => void
+  buyNow: (product: Product, selection?: ProductSelection) => void
   setQuantity: (productId: number, quantity: number) => void
   toggleWishlist: (product: Product) => void
   restoreAccountData: (data: AuthStoreData) => void
@@ -43,6 +44,7 @@ type StorefrontContextValue = {
   updateCheckoutDetails: (details: CheckoutDetails) => void
   paymentMethods: PaymentMethod[]
   placeOrder: (submission: CheckoutSubmission) => DemoOrder | null
+  clearCart: () => void
   rateOrderItem: (orderId: string, productId: number, rating: number) => void
 }
 
@@ -71,6 +73,7 @@ const initialCheckoutDetails: CheckoutDetails = {
 
 export function StorefrontProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<CartQuantities>(() => readDemoState('leex-demo-cart', {}))
+  const [cartSelections, setCartSelections] = useState<Record<number, ProductSelection>>(() => readDemoState('leex-demo-cart-selections', {}))
   const [wishlist, setWishlist] = useState<WishlistState>(() => readDemoState('leex-demo-wishlist', wishlistSeed))
   const [orders, setOrders] = useState<DemoOrder[]>(() => readDemoState('leex-demo-orders', demoOrders))
   const [checkoutDetails, setCheckoutDetails] = useState<CheckoutDetails>(() => readDemoState('leex-demo-checkout', initialCheckoutDetails))
@@ -86,6 +89,7 @@ export function StorefrontProvider({ children }: { children: ReactNode }) {
   const wishedProducts = products.filter((product) => wishlistIds.includes(product.id))
 
   useEffect(() => { window.localStorage.setItem('leex-demo-cart', JSON.stringify(cart)) }, [cart])
+  useEffect(() => { window.localStorage.setItem('leex-demo-cart-selections', JSON.stringify(cartSelections)) }, [cartSelections])
   useEffect(() => { window.localStorage.setItem('leex-demo-wishlist', JSON.stringify(wishlist)) }, [wishlist])
   useEffect(() => {
     const userId = getPersistedUserId()
@@ -95,17 +99,24 @@ export function StorefrontProvider({ children }: { children: ReactNode }) {
   useEffect(() => { window.localStorage.setItem('leex-demo-checkout', JSON.stringify(checkoutDetails)) }, [checkoutDetails])
   useEffect(() => { window.localStorage.setItem('leex-demo-coupon', JSON.stringify(appliedCouponCode)) }, [appliedCouponCode])
 
-  function addToCart(product: Product, amount = 1) {
+  function addToCart(product: Product, amount = 1, selection?: ProductSelection) {
     setCart((current) => ({ ...current, [product.id]: (current[product.id] ?? 0) + amount }))
+    if (selection) setCartSelections((current) => ({ ...current, [product.id]: selection }))
     notify(storeText.productAdded.replace('{name}', product.name))
   }
 
-  function buyNow(product: Product) {
+  function buyNow(product: Product, selection?: ProductSelection) {
     setCart((current) => ({ ...current, [product.id]: Math.max(current[product.id] ?? 0, 1) }))
+    if (selection) setCartSelections((current) => ({ ...current, [product.id]: selection }))
     setNotice(null)
   }
 
   function setQuantity(productId: number, quantity: number) {
+    if (quantity <= 0) setCartSelections((current) => {
+      const next = { ...current }
+      delete next[productId]
+      return next
+    })
     setCart((current) => {
       const next = { ...current }
       if (quantity <= 0) delete next[productId]
@@ -137,7 +148,8 @@ export function StorefrontProvider({ children }: { children: ReactNode }) {
     const lines = products.filter((product) => cart[product.id] > 0).map((product) => ({
       productId: product.id,
       name: product.name,
-      color: product.color,
+      color: cartSelections[product.id]?.color ?? product.color,
+      size: cartSelections[product.id]?.size,
       image: product.image,
       unitPrice: product.price,
       quantity: cart[product.id],
@@ -168,9 +180,13 @@ export function StorefrontProvider({ children }: { children: ReactNode }) {
     }
 
     setOrders((current) => [order, ...current])
-    setCart({})
-    setAppliedCouponCode('')
     return order
+  }
+
+  function clearCart() {
+    setCart({})
+    setCartSelections({})
+    setAppliedCouponCode('')
   }
 
   function applyCoupon(code: string) {
@@ -200,6 +216,7 @@ export function StorefrontProvider({ children }: { children: ReactNode }) {
   const value: StorefrontContextValue = {
     products,
     cart,
+    cartSelections,
     cartCount,
     cartTotal,
     orderTotals,
@@ -225,6 +242,7 @@ export function StorefrontProvider({ children }: { children: ReactNode }) {
     updateCheckoutDetails: setCheckoutDetails,
     paymentMethods: demoPaymentMethods,
     placeOrder,
+    clearCart,
     rateOrderItem,
   }
 
