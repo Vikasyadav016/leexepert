@@ -8,6 +8,8 @@ After a successful deployment, the site is available at:
 
 The workflow enables GitHub Pages and publishes the `frontend/dist` build. If GitHub Pages is not enabled automatically, open **Settings → Pages** and select **GitHub Actions** as the build and deployment source.
 
+The workflow also publishes `index.html` as `404.html` so GitHub Pages can serve the app for direct links and page refreshes. The router uses Vite's configured base path to resolve those URLs correctly under the repository's `/leexepert/` path.
+
 ## Backend configuration
 
 GitHub Pages only hosts the static frontend; it does not run the Express backend or MongoDB. To use API-backed features on the deployed site:
