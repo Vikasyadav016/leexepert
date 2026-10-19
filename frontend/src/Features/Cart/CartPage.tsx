@@ -1,4 +1,4 @@
-import type { CartQuantities, Product } from '../Storefront/types'
+import type { CartQuantities, CheckoutTotals, CouponOffer, Product } from '../Storefront/types'
 import { EmptyState } from '../Storefront/components/ProductGrid'
 import cartText from '../../TextJson/Cart/CartPage.json'
 import './CartPage.css'
@@ -6,12 +6,13 @@ import './CartPage.css'
 type CartPageProps = {
   products: Product[]
   quantities: CartQuantities
-  total: number
-  onNavigate: (page: 'Shop' | 'Checkout') => void
+  totals: CheckoutTotals
+  selectedCoupon: CouponOffer | null
+  onNavigate: (page: 'Shop' | 'Checkout' | 'Coupons') => void
   onSetQuantity: (productId: number, quantity: number) => void
 }
 
-export function CartPage({ products, quantities, total, onNavigate, onSetQuantity }: CartPageProps) {
+export function CartPage({ products, quantities, totals, selectedCoupon, onNavigate, onSetQuantity }: CartPageProps) {
   const cartProducts = products.filter((product) => quantities[product.id] > 0)
   const count = Object.values(quantities).reduce((sum, quantity) => sum + quantity, 0)
 
@@ -30,7 +31,7 @@ export function CartPage({ products, quantities, total, onNavigate, onSetQuantit
               </div>
             ))}
           </div>
-          <aside className="order-summary"><p className="eyebrow">{cartText.summaryEyebrow}</p><h2>{cartText.total}</h2><p><span>{cartText.subtotal}</span><span>${total.toFixed(2)}</span></p><p><span>{cartText.shipping}</span><span>{total >= 150 ? cartText.complimentary : cartText.shippingAtCheckout}</span></p><div className="summary-total"><span>{cartText.subtotal}</span><strong>${total.toFixed(2)}</strong></div><button className="button button-dark full-button" onClick={() => onNavigate('Checkout')}>{cartText.checkout} <span>↗</span></button><p className="secure-note">{cartText.demoNote}</p></aside>
+          <aside className="order-summary"><p className="eyebrow">{cartText.summaryEyebrow}</p><h2>{cartText.total}</h2><p><span>{cartText.subtotal}</span><span>${totals.subtotal.toFixed(2)}</span></p>{selectedCoupon && <p className="cart-discount"><span>{selectedCoupon.code}</span><span>{totals.discount ? `−$${totals.discount.toFixed(2)}` : 'Not currently eligible'}</span></p>}<p><span>{cartText.shipping}</span><span>{totals.shipping ? `$${totals.shipping.toFixed(2)}` : cartText.complimentary}</span></p><p><span>Estimated tax</span><span>${totals.tax.toFixed(2)}</span></p><div className="summary-total"><span>Estimated total</span><strong>${totals.total.toFixed(2)}</strong></div><button className="button button-dark full-button" onClick={() => onNavigate('Checkout')}>{cartText.checkout} <span>↗</span></button><button className="cart-coupons-link" onClick={() => onNavigate('Coupons')}>Explore available offers</button><p className="secure-note">{cartText.demoNote}</p></aside>
         </div>
       )}
     </section>

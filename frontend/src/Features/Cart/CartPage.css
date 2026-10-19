@@ -80,6 +80,8 @@
   color: var(--forest);
   font-size: 12px;
 }
+.cart-discount { color: var(--terracotta) !important; }
+.cart-coupons-link { justify-self: center; padding: 5px 0; border: 0; background: transparent; color: var(--forest); font-size: 10px; text-decoration: underline; text-underline-offset: 3px; }
 @media (max-width: 820px) {
   .cart-layout {
     grid-template-columns: minmax(0, 1.5fr) minmax(270px, 0.7fr);

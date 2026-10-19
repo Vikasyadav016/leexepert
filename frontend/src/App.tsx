@@ -8,10 +8,13 @@ import {
   CatalogRoute,
   CheckoutAddressRoute,
   CheckoutPaymentRoute,
+  CouponsRoute,
   CustomerRoute,
   HomeRoute,
+  OrderDetailsRoute,
   OrdersRoute,
   OrderCompleteRoute,
+  OrderTrackingRoute,
   ProductRoute,
   WishlistHistoryRoute,
   WishlistRoute,
@@ -32,9 +35,13 @@ function App() {
               <Route path="products/:productId" element={<ProductRoute />} />
               <Route path="cart" element={<CartRoute />} />
               <Route path="wishlist" element={<WishlistRoute />} />
-              <Route element={<RequireAuth />}>
+              <Route path="coupons" element={<CouponsRoute />} />
+              <Route element={<RequireAuth loginRequired />}>
                 <Route path="wishlist/history" element={<WishlistHistoryRoute />} />
                 <Route path="orders" element={<OrdersRoute />} />
+                <Route path="orders/:orderNumber" element={<OrderDetailsRoute />} />
+                <Route path="orders/:orderNumber/tracking" element={<OrderTrackingRoute />} />
+                <Route path="track-order" element={<OrdersRoute />} />
                 <Route path="order-complete/:orderNumber" element={<OrderCompleteRoute />} />
                 <Route path="profile" element={<ProfileRoute />} />
               </Route>
@@ -46,7 +53,6 @@ function App() {
                 <Route path="account" element={<CustomerRoute page="Account" />} />
               </Route>
               <Route path="returns" element={<CustomerRoute page="Returns" />} />
-              <Route path="track-order" element={<CustomerRoute page="Track Order" />} />
               <Route path="about" element={<CustomerRoute page="About Brand" />} />
               <Route path="contact" element={<CustomerRoute page="Contact" />} />
               <Route path="policies" element={<CustomerRoute page="Policies" />} />

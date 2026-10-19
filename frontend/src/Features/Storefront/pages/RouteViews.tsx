@@ -2,7 +2,10 @@ import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { CartPage } from '../../Cart/CartPage'
 import { OrdersPage } from '../../Orders/OrdersPage'
 import { OrderCompletePage } from '../../Orders/OrderCompletePage'
+import { OrderDetailsPage } from '../../Orders/OrderDetailsPage'
+import { OrderTrackingPage } from '../../Orders/OrderTrackingPage'
 import { AddressPage } from '../../Payment/AddressPage'
+import { CouponsPage } from '../../Payment/CouponsPage'
 import { PaymentPage } from '../../Payment/PaymentPage'
 import { WishlistHistoryPage } from '../../Wishlist/WishlistPage'
 import { WishlistPage } from '../../Wishlist/WishlistPage'
@@ -57,7 +60,7 @@ export function ProductRoute() {
 export function CartRoute() {
   const store = useStorefront()
   const navigate = useNavigate()
-  return <CartPage products={products} quantities={store.cart} total={store.cartTotal} onNavigate={(page) => navigate(pagePaths[page])} onSetQuantity={store.setQuantity} />
+  return <CartPage products={products} quantities={store.cart} totals={store.orderTotals} selectedCoupon={store.selectedCoupon} onNavigate={(page) => navigate(pagePaths[page])} onSetQuantity={store.setQuantity} />
 }
 
 export function WishlistRoute() {
@@ -75,20 +78,20 @@ export function CheckoutAddressRoute() {
   const store = useStorefront()
   const navigate = useNavigate()
   if (store.cartCount === 0) return <Navigate to="/cart" replace />
-  return <AddressPage initialDetails={store.checkoutDetails} onContinue={(details) => { store.updateCheckoutDetails(details); navigate('/checkout/payment') }} products={products} quantities={store.cart} subtotal={store.cartTotal} />
+  return <AddressPage initialDetails={store.checkoutDetails} onContinue={(details) => { store.updateCheckoutDetails(details); navigate('/checkout/payment') }} products={products} quantities={store.cart} totals={store.orderTotals} />
 }
 
 export function CheckoutPaymentRoute() {
   const store = useStorefront()
   const navigate = useNavigate()
   if (store.cartCount === 0) return <Navigate to="/cart" replace />
-  return <PaymentPage products={products} quantities={store.cart} subtotal={store.cartTotal} address={store.checkoutDetails.address} paymentMethods={store.paymentMethods} onPlaceOrder={(paymentMethodId) => { const order = store.placeOrder({ ...store.checkoutDetails, paymentMethodId }); if (order) navigate(`/order-complete/${order.orderNumber}`) }} />
+  return <PaymentPage products={products} quantities={store.cart} subtotal={store.cartTotal} totals={store.orderTotals} address={store.checkoutDetails.address} paymentMethods={store.paymentMethods} coupons={store.coupons} selectedCoupon={store.selectedCoupon} onApplyCoupon={store.applyCoupon} onClearCoupon={store.clearCoupon} onPlaceOrder={(paymentMethodId) => { const order = store.placeOrder({ ...store.checkoutDetails, paymentMethodId }); if (order) navigate(`/order-complete/${order.orderNumber}`) }} />
 }
 
 export function OrdersRoute() {
   const navigate = useNavigate()
   const store = useStorefront()
-  return <OrdersPage orders={store.orders} onNavigate={navigate} onRate={store.rateOrderItem} />
+  return <OrdersPage orders={store.orders} onNavigate={navigate} onTrack={(orderNumber) => navigate(`/orders/${orderNumber}/tracking`)} onDetails={(orderNumber) => navigate(`/orders/${orderNumber}`)} onRate={store.rateOrderItem} />
 }
 
 export function OrderCompleteRoute() {
@@ -97,7 +100,28 @@ export function OrderCompleteRoute() {
   const store = useStorefront()
   const order = store.orders.find((item) => item.orderNumber === orderNumber)
   if (!order) return <Navigate to="/orders" replace />
-  return <OrderCompletePage order={order} onRate={(productId, rating) => store.rateOrderItem(order.id, productId, rating)} onNavigate={navigate} />
+  return <OrderCompletePage order={order} onRate={(productId, rating) => store.rateOrderItem(order.id, productId, rating)} onNavigate={navigate} onTrack={() => navigate(`/orders/${order.orderNumber}/tracking`)} onDetails={() => navigate(`/orders/${order.orderNumber}`)} />
+}
+
+export function OrderDetailsRoute() {
+  const { orderNumber } = useParams()
+  const store = useStorefront()
+  const order = store.orders.find((item) => item.orderNumber === orderNumber)
+  if (!order) return <Navigate to="/orders" replace />
+  return <OrderDetailsPage order={order} />
+}
+
+export function OrderTrackingRoute() {
+  const { orderNumber } = useParams()
+  const store = useStorefront()
+  const order = store.orders.find((item) => item.orderNumber === orderNumber)
+  if (!order) return <Navigate to="/orders" replace />
+  return <OrderTrackingPage order={order} />
+}
+
+export function CouponsRoute() {
+  const navigate = useNavigate()
+  return <CouponsPage onShop={() => navigate('/shop')} />
 }
 
 export function ProfileRoute() {

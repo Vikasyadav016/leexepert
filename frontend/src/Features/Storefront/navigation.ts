@@ -12,6 +12,7 @@ export const pagePaths: Record<Page, string> = {
   Account: '/account',
   Profile: '/profile',
   Orders: '/orders',
+  Coupons: '/coupons',
   Returns: '/returns',
   'Track Order': '/track-order',
   'About Brand': '/about',
@@ -30,6 +31,7 @@ export function pageForPath(pathname: string): Page {
   if (pathname === '/account') return 'Account'
   if (pathname === '/profile') return 'Profile'
   if (pathname === '/orders') return 'Orders'
+  if (pathname === '/coupons') return 'Coupons'
   if (pathname === '/returns') return 'Returns'
   if (pathname === '/track-order') return 'Track Order'
   if (pathname === '/about') return 'About Brand'

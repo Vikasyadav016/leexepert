@@ -6,12 +6,14 @@ import './OrdersPage.css'
 type OrdersPageProps = {
   orders: DemoOrder[]
   onNavigate: (page: Page) => void
+  onTrack: (orderNumber: string) => void
+  onDetails: (orderNumber: string) => void
   onRate: (orderId: string, productId: number, rating: number) => void
 }
 
 const currency = (value: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value)
 
-export function OrdersPage({ orders, onNavigate, onRate }: OrdersPageProps) {
+export function OrdersPage({ orders, onNavigate, onTrack, onDetails, onRate }: OrdersPageProps) {
   return (
     <section className="section-block content-page order-history-page">
       <p className="eyebrow">{ordersText.eyebrow}</p>
@@ -22,7 +24,7 @@ export function OrdersPage({ orders, onNavigate, onRate }: OrdersPageProps) {
           <article className="history-order" key={order.id}>
             <div className="history-order-top"><div><span className="order-overline">{ordersText.orderPrefix} {order.orderNumber}</span><time dateTime={order.placedAt}>{new Date(order.placedAt).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })}</time></div><span className="order-status">{order.status}</span></div>
             <div className="history-order-body"><div className="history-order-lines">{order.lines.map((line) => <div className="history-order-line" key={`${order.id}-${line.productId}`}><img src={line.image} alt={line.name} /><div><strong>{line.name}</strong><span>{line.color} · {ordersText.quantity} {line.quantity}</span><div className="history-order-rating"><ProductRating value={line.rating} onChange={line.rating ? undefined : (rating) => onRate(order.id, line.productId, rating)} />{line.rating && <small>{ordersText.rated}</small>}</div></div><span>{currency(line.unitPrice * line.quantity)}</span></div>)}</div>
-              <aside className="history-order-summary"><span>{ordersText.paidWith} {order.paymentMethod.name}</span><span>{order.paymentStatus}</span><div><strong>{ordersText.totalPaid}</strong><strong>{currency(order.total)}</strong></div><button className="text-link" onClick={() => onNavigate('Track Order')}>{ordersText.delivery}<span>↗</span></button></aside></div>
+              <aside className="history-order-summary"><span>{ordersText.paidWith} {order.paymentMethod.name}</span><span>{order.paymentStatus}</span><div><strong>{ordersText.totalPaid}</strong><strong>{currency(order.total)}</strong></div><button className="text-link" onClick={() => onTrack(order.orderNumber)}>{ordersText.delivery}<span>↗</span></button><button className="text-link" onClick={() => onDetails(order.orderNumber)}>Order details<span>↗</span></button></aside></div>
           </article>
         ))}</div>
       )}

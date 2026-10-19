@@ -7,8 +7,10 @@ import wishlistHistoryData from '../../DummyDataTest/wishlist-history.json'
 import { getPersistedUserId, saveAccountStoreData, type AuthStoreData } from '../../../Services/AuthServices/AuthContext'
 import type { ToastNotice, ToastPlacement } from '../components/PremiumToast'
 import { products } from '../data/products'
+import { coupons } from '../data/coupons'
+import { calculateCheckoutTotals } from '../data/checkoutTotals'
 import storeText from '../../../TextJson/Storefront/StorefrontContext.json'
-import type { Address, CartQuantities, CheckoutSubmission, DemoOrder, PaymentMethod, Product, WishlistEvent, WishlistItem } from '../types'
+import type { Address, CartQuantities, CheckoutSubmission, CouponOffer, DemoOrder, PaymentMethod, Product, WishlistEvent, WishlistItem } from '../types'
 
 export type WishlistState = { items: WishlistItem[]; events: WishlistEvent[] }
 type CheckoutDetails = { email: string; address: Address }
@@ -18,6 +20,11 @@ type StorefrontContextValue = {
   cart: CartQuantities
   cartCount: number
   cartTotal: number
+  orderTotals: ReturnType<typeof calculateCheckoutTotals>
+  selectedCoupon: CouponOffer | null
+  coupons: CouponOffer[]
+  applyCoupon: (code: string) => boolean
+  clearCoupon: () => void
   wishlist: WishlistState
   wishlistIds: number[]
   wishedProducts: Product[]
@@ -67,12 +74,15 @@ export function StorefrontProvider({ children }: { children: ReactNode }) {
   const [wishlist, setWishlist] = useState<WishlistState>(() => readDemoState('leex-demo-wishlist', wishlistSeed))
   const [orders, setOrders] = useState<DemoOrder[]>(() => readDemoState('leex-demo-orders', demoOrders))
   const [checkoutDetails, setCheckoutDetails] = useState<CheckoutDetails>(() => readDemoState('leex-demo-checkout', initialCheckoutDetails))
+  const [appliedCouponCode, setAppliedCouponCode] = useState<string>(() => readDemoState('leex-demo-coupon', ''))
   const [query, setQuery] = useState('')
   const [notice, setNotice] = useState<ToastNotice | null>(null)
 
   const wishlistIds = wishlist.items.map((item) => item.productId)
   const cartCount = Object.values(cart).reduce((sum, count) => sum + count, 0)
   const cartTotal = products.reduce((sum, product) => sum + product.price * (cart[product.id] ?? 0), 0)
+  const selectedCoupon = coupons.find((coupon) => coupon.code === appliedCouponCode) ?? null
+  const orderTotals = calculateCheckoutTotals(cartTotal, selectedCoupon)
   const wishedProducts = products.filter((product) => wishlistIds.includes(product.id))
 
   useEffect(() => { window.localStorage.setItem('leex-demo-cart', JSON.stringify(cart)) }, [cart])
@@ -83,6 +93,7 @@ export function StorefrontProvider({ children }: { children: ReactNode }) {
   }, [cart, wishlist])
   useEffect(() => { window.localStorage.setItem('leex-demo-orders', JSON.stringify(orders)) }, [orders])
   useEffect(() => { window.localStorage.setItem('leex-demo-checkout', JSON.stringify(checkoutDetails)) }, [checkoutDetails])
+  useEffect(() => { window.localStorage.setItem('leex-demo-coupon', JSON.stringify(appliedCouponCode)) }, [appliedCouponCode])
 
   function addToCart(product: Product, amount = 1) {
     setCart((current) => ({ ...current, [product.id]: (current[product.id] ?? 0) + amount }))
@@ -134,8 +145,8 @@ export function StorefrontProvider({ children }: { children: ReactNode }) {
     if (!lines.length) return null
 
     const subtotal = lines.reduce((sum, line) => sum + line.unitPrice * line.quantity, 0)
-    const shipping = subtotal >= 150 ? 0 : 8
-    const tax = Math.round(subtotal * 0.08 * 100) / 100
+    const coupon = coupons.find((offer) => offer.code === appliedCouponCode) ?? null
+    const totals = calculateCheckoutTotals(subtotal, coupon)
     const paymentMethod = demoPaymentMethods.find((method) => method.id === submission.paymentMethodId) ?? demoPaymentMethods[0]
     const placedAt = new Date().toISOString()
     const orderNumber = `LE-${placedAt.slice(2, 10).replaceAll('-', '')}-${Date.now().toString().slice(-4)}`
@@ -145,10 +156,12 @@ export function StorefrontProvider({ children }: { children: ReactNode }) {
       placedAt,
       status: storeText.orderStatus,
       paymentStatus: storeText.paymentStatus,
-      subtotal,
-      shipping,
-      tax,
-      total: subtotal + shipping + tax,
+      subtotal: totals.subtotal,
+      discount: totals.discount,
+      couponCode: totals.discount ? coupon?.code : undefined,
+      shipping: totals.shipping,
+      tax: totals.tax,
+      total: totals.total,
       paymentMethod: { id: paymentMethod.id, name: paymentMethod.name },
       address: { ...submission.address, email: submission.email },
       lines,
@@ -156,7 +169,15 @@ export function StorefrontProvider({ children }: { children: ReactNode }) {
 
     setOrders((current) => [order, ...current])
     setCart({})
+    setAppliedCouponCode('')
     return order
+  }
+
+  function applyCoupon(code: string) {
+    const coupon = coupons.find((offer) => offer.code === code)
+    if (!coupon || cartTotal < coupon.minimumSubtotal) return false
+    setAppliedCouponCode(coupon.code)
+    return true
   }
 
   function rateOrderItem(orderId: string, productId: number, rating: number) {
@@ -181,6 +202,11 @@ export function StorefrontProvider({ children }: { children: ReactNode }) {
     cart,
     cartCount,
     cartTotal,
+    orderTotals,
+    selectedCoupon,
+    coupons,
+    applyCoupon,
+    clearCoupon: () => setAppliedCouponCode(''),
     wishlist,
     wishlistIds,
     wishedProducts,

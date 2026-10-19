@@ -19,6 +19,11 @@
 .order-complete-rate-prompt { margin-top: 5px; color: var(--ink); font-size: 9px; }
 .order-complete-price { color: var(--ink); font-size: 11px; }
 .order-complete-actions { display: flex; justify-content: flex-end; gap: 10px; padding-top: 21px; }
+.order-complete-totals { display: grid; max-width: 310px; gap: 8px; margin: 16px 0 0 auto; padding-top: 13px; border-top: 1px solid var(--line); }
+.order-complete-totals p, .order-complete-totals > div { display: flex; justify-content: space-between; gap: 14px; margin: 0; color: var(--muted); font-size: 10px; }
+.order-complete-totals > p:nth-child(2) { color: var(--terracotta); }
+.order-complete-totals > div { margin-top: 3px; padding-top: 10px; border-top: 1px solid var(--line); color: var(--forest); font-size: 12px; }
+.order-complete-actions { flex-wrap: wrap; }
 .order-complete-confetti { position: absolute; inset: 0 0 auto; height: 250px; pointer-events: none; }
 .order-complete-confetti i { position: absolute; top: -12px; left: calc(var(--i, 1) * 10%); width: 5px; height: 13px; background: var(--terracotta); opacity: 0; animation: order-confetti 1.25s .2s ease-out both; }
 .order-complete-confetti i:nth-child(2n) { background: #738a6a; animation-delay: .28s; }

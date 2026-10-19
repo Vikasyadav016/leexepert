@@ -10,6 +10,7 @@ export type Page =
   | 'Account'
   | 'Profile'
   | 'Orders'
+  | 'Coupons'
   | 'Returns'
   | 'Track Order'
   | 'About Brand'
@@ -54,6 +55,24 @@ export type PaymentMethod = {
   isDefault: boolean
 }
 
+export type CouponOffer = {
+  code: string
+  title: string
+  description: string
+  badge: string
+  kind: 'percent' | 'fixed'
+  amount: number
+  minimumSubtotal: number
+}
+
+export type CheckoutTotals = {
+  subtotal: number
+  discount: number
+  shipping: number
+  tax: number
+  total: number
+}
+
 export type OrderLine = {
   productId: number
   name: string
@@ -71,6 +90,8 @@ export type DemoOrder = {
   status: string
   paymentStatus: string
   subtotal: number
+  discount?: number
+  couponCode?: string
   shipping: number
   tax: number
   total: number

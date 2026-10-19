@@ -14,7 +14,7 @@ export function SiteFooter({ onNavigate, onSubmit }: SiteFooterProps) {
     <footer className="site-footer">
       <div className="footer-main">
         <div><button className="wordmark footer-wordmark" onClick={() => onNavigate('Home')}>{brandText.name}<span>®</span></button><p>{footerText.brandLine1}<br />{footerText.brandLine2}</p></div>
-        <div className="footer-column"><span>{footerText.explore}</span><button onClick={() => onNavigate('Shop')}>{footerText.shop}</button><button onClick={() => onNavigate('Collections')}>{footerText.collections}</button><button onClick={() => onNavigate('About Brand')}>{footerText.about}</button></div>
+        <div className="footer-column"><span>{footerText.explore}</span><button onClick={() => onNavigate('Shop')}>{footerText.shop}</button><button onClick={() => onNavigate('Collections')}>{footerText.collections}</button><button onClick={() => onNavigate('Coupons')}>{footerText.offers}</button><button onClick={() => onNavigate('About Brand')}>{footerText.about}</button></div>
         <div className="footer-column"><span>{footerText.customerCare}</span><button onClick={() => onNavigate('Contact')}>{footerText.contact}</button><button onClick={() => onNavigate('Orders')}>{footerText.orders}</button><button onClick={() => onNavigate('Track Order')}>{footerText.trackOrder}</button><button onClick={() => onNavigate('Returns')}>{footerText.returns}</button><button onClick={() => onNavigate('Policies')}>{footerText.policies}</button></div>
         <div className="footer-newsletter">
           <span>{footerText.newsletter}</span>

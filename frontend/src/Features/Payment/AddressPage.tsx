@@ -1,5 +1,5 @@
 import type { FormEvent } from 'react'
-import type { Address, CartQuantities, Product } from '../Storefront/types'
+import type { Address, CartQuantities, CheckoutTotals, Product } from '../Storefront/types'
 import addressText from '../../TextJson/Checkout/AddressPage.json'
 import './Checkout.css'
 
@@ -9,11 +9,11 @@ type AddressPageProps = {
   initialDetails: CheckoutDetails
   products: Product[]
   quantities: CartQuantities
-  subtotal: number
+  totals: CheckoutTotals
   onContinue: (details: CheckoutDetails) => void
 }
 
-export function AddressPage({ initialDetails, products, quantities, subtotal, onContinue }: AddressPageProps) {
+export function AddressPage({ initialDetails, products, quantities, totals, onContinue }: AddressPageProps) {
   const items = products.filter((product) => quantities[product.id] > 0)
 
   function submitAddress(event: FormEvent<HTMLFormElement>) {
@@ -49,16 +49,14 @@ export function AddressPage({ initialDetails, products, quantities, subtotal, on
           </section>
           <button className="button button-dark full-button place-order-button">{addressText.continue} <span>↗</span></button>
         </form>
-        <CheckoutSummary products={items} quantities={quantities} subtotal={subtotal} />
+        <CheckoutSummary products={items} quantities={quantities} totals={totals} />
       </div>
     </section>
   )
 }
 
-function CheckoutSummary({ products, quantities, subtotal }: { products: Product[]; quantities: CartQuantities; subtotal: number }) {
-  const shipping = subtotal >= 150 ? 0 : 8
-  const tax = Math.round(subtotal * 0.08 * 100) / 100
+function CheckoutSummary({ products, quantities, totals }: { products: Product[]; quantities: CartQuantities; totals: CheckoutTotals }) {
   return (
-    <aside className="order-summary checkout-summary"><p className="eyebrow">{addressText.summaryEyebrow}</p><h2>{addressText.summaryTitle}</h2>{products.map((product) => <div className="checkout-product" key={product.id}><img src={product.image} alt="" /><div><strong>{product.name}</strong><small>{product.color} · {addressText.quantity} {quantities[product.id]}</small></div><span>${(product.price * quantities[product.id]).toFixed(2)}</span></div>)}<div className="checkout-totals"><p><span>{addressText.subtotal}</span><span>${subtotal.toFixed(2)}</span></p><p><span>{addressText.shipping}</span><span>{shipping ? `$${shipping.toFixed(2)}` : addressText.complimentary}</span></p><p><span>{addressText.tax}</span><span>${tax.toFixed(2)}</span></p><div className="summary-total"><strong>{addressText.total}</strong><strong>${(subtotal + shipping + tax).toFixed(2)}</strong></div></div></aside>
+    <aside className="order-summary checkout-summary"><p className="eyebrow">{addressText.summaryEyebrow}</p><h2>{addressText.summaryTitle}</h2>{products.map((product) => <div className="checkout-product" key={product.id}><img src={product.image} alt="" /><div><strong>{product.name}</strong><small>{product.color} · {addressText.quantity} {quantities[product.id]}</small></div><span>${(product.price * quantities[product.id]).toFixed(2)}</span></div>)}<div className="checkout-totals"><p><span>{addressText.subtotal}</span><span>${totals.subtotal.toFixed(2)}</span></p>{totals.discount > 0 && <p className="checkout-discount"><span>Coupon savings</span><span>−${totals.discount.toFixed(2)}</span></p>}<p><span>{addressText.shipping}</span><span>{totals.shipping ? `$${totals.shipping.toFixed(2)}` : addressText.complimentary}</span></p><p><span>{addressText.tax}</span><span>${totals.tax.toFixed(2)}</span></p><div className="summary-total"><strong>{addressText.total}</strong><strong>${totals.total.toFixed(2)}</strong></div></div></aside>
   )
 }
